@@ -9,6 +9,7 @@ public class Plane {
     public Plane(char c, int dim) {
         rep = c;
         dimensions = dim;
+        face = new char[4][4];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
                 face[i][j] = c;

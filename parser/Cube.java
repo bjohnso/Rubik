@@ -1,7 +1,6 @@
 package parser;
 
 import java.util.*;
-import parser.Plane;
 
 public class Cube{
 
@@ -33,9 +32,22 @@ public class Cube{
     
 
     public int readInstructions(final String instructions) {
-        char[] tem = new char[dimensions];
-        for (String temp : instructions.split(" ")) {
-            
+
+        String face = "";
+        int rot = 1;
+        for (String temp : instructions.split(" ")){
+            face = temp.contains("U") ? "U" : face;
+            face = temp.contains("D") ? "D" : face;
+            face = temp.contains("L") ? "L" : face;
+            face = temp.contains("R") ? "R" : face;
+            face = temp.contains("F") ? "F" : face;
+            face = temp.contains("B") ? "B" : face;
+            int direction = temp.contains("`") ? -1 : 1;
+            rot = temp.contains("U") || temp.contains("B") ? 2 : rot;
+            rot = temp.contains("D") || temp.contains("F") ? 2 : rot;
+            rot = temp.contains("L") ? 3 : rot;
+            rot = temp.contains("R") ? 4 : rot;
+            rotation(face, direction, rot);
         }
         return (0);
     }
@@ -95,5 +107,9 @@ public class Cube{
             default:
                 return null;
         }
+    }
+
+    public static void main(String [] args){
+        Cube cube = new Cube(3);
     }
 }
