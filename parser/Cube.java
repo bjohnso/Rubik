@@ -53,9 +53,9 @@ public class Cube{
     }
 
     public void rotation(String face, int direction, int rot){
-        char [][] temp = new char [][] {getFaceRotation(sides.get(face)[1], rot), 
-            getFaceRotation(sides.get(face)[2], rot), getFaceRotation(sides.get(face)[3], rot), 
-            getFaceRotation(sides.get(face)[0], rot)};
+        char [][] temp = new char [][] {getFaceRotation(sides.get(face)[3], rot), 
+            getFaceRotation(sides.get(face)[0], rot), getFaceRotation(sides.get(face)[1], rot), 
+            getFaceRotation(sides.get(face)[2], rot)};
         if (direction == 1){
             for (int i = 0; i < sides.get(face).length; i++){
                 faceParser(sides.get(face)[i], rot, temp[i]);
