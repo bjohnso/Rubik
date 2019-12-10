@@ -60,9 +60,7 @@ public class Plane {
         if (ind < 0 || ind >= dimensions) {
             return (-1);
         }
-        System.out.println(rep);
         face[ind] = row;
-        System.out.println(face[ind]);
         return (0);
     }
 
@@ -70,7 +68,7 @@ public class Plane {
         if (ind < 0 || ind >= dimensions) {
             return (-1);
         }
-        for (int i = 0; i < dimensions; i++) {
+        for (int i = 0; i < 3; i++) {
             face[i][ind] = col[i];
         }
         return (0);
@@ -79,9 +77,7 @@ public class Plane {
     public char[] getRow(int ind) {
         if (ind < 0 || ind >= dimensions) {
             return null;
-        }
-        // System.out.println(face[ind]); 
-        // printFace();               
+        }            
         return face[ind];
     }
 
@@ -91,9 +87,8 @@ public class Plane {
         }
         char[] res = new char[3];
         for (int i = 0; i < dimensions; i++) {
-            res[i] = face[ind][i];
+            res[i] = face[i][ind];
         }
-        System.out.println(res);
         return res;
     }
 

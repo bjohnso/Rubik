@@ -42,28 +42,30 @@ public class Cube{
             face = temp.contains("R") ? "R" : face;
             face = temp.contains("F") ? "F" : face;
             face = temp.contains("B") ? "B" : face;
-            int direction = temp.contains("`") ? -1 : 1;
+            int direction = temp.contains("’") ? -1 : 1;
             rot = temp.contains("U") || temp.contains("B") ? 2 : rot;
             rot = temp.contains("D") || temp.contains("F") ? 2 : rot;
             rot = temp.contains("L") ? 3 : rot;
             rot = temp.contains("R") ? 4 : rot;
             rotation(face, direction, rot);
+            if (temp.contains("2"))
+                rotation(face, direction, rot);
         }
         return (0);
     }
 
     public void rotation(String face, int direction, int rot){
-        char [][] temp = new char [][] {getFaceRotation(sides.get(face)[3], rot), 
+        char [][] temp1 = new char [][] {getFaceRotation(sides.get(face)[3], rot), 
             getFaceRotation(sides.get(face)[0], rot), getFaceRotation(sides.get(face)[1], rot), 
             getFaceRotation(sides.get(face)[2], rot)};
-        if (direction == 1){
-            for (int i = 0; i < sides.get(face).length; i++){
-                faceParser(sides.get(face)[i], rot, temp[i]);
-            }
-        }else if (direction == -1){
-            for (int i = sides.get(face).length - 1; i >= 0 ; i--){
-                faceParser(sides.get(face)[i], rot, temp[i]);
-            }
+        
+        char [][] temp2 = new char [][] {getFaceRotation(sides.get(face)[1], rot), 
+            getFaceRotation(sides.get(face)[2], rot), getFaceRotation(sides.get(face)[3], rot), 
+            getFaceRotation(sides.get(face)[0], rot)};
+        char [][] direc = (direction == -1 )? temp2 : temp1;
+
+        for (int i = 0; i < sides.get(face).length; i++){
+            faceParser(sides.get(face)[i], rot, direc[i]);
         }
     }
 
@@ -92,7 +94,6 @@ public class Cube{
     }
 
     public char[] getFaceRotation(String face, int rotation){
-        // System.out.println(face + " " + rotation);
         switch(face){
             case "F":
                 return Front.getRotate(rotation);
@@ -113,9 +114,12 @@ public class Cube{
 
     public static void main(String [] args){
         Cube cube = new Cube(3);
-        String inst = "B";
+        String inst = "R R R";
         cube.readInstructions(inst);
         cube.Up.printFace();
+        cube.Back.printFace();
+        cube.Down.printFace();
+        cube.Front.printFace();
 
     }
 }
