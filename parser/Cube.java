@@ -31,7 +31,7 @@ public class Cube{
     }
     
 
-    public int readInstructions(final String instructions) {
+    public int readInstructions(String instructions) {
 
         String face = "";
         int rot = 1;
@@ -53,21 +53,22 @@ public class Cube{
     }
 
     public void rotation(String face, int direction, int rot){
-        char [][] temp = new char [][] {getFaceRotation(sides.get(face)[0], rot), 
-            getFaceRotation(sides.get(face)[1], rot), getFaceRotation(sides.get(face)[2], rot), 
-            getFaceRotation(sides.get(face)[3], rot)};
+        char [][] temp = new char [][] {getFaceRotation(sides.get(face)[1], rot), 
+            getFaceRotation(sides.get(face)[2], rot), getFaceRotation(sides.get(face)[3], rot), 
+            getFaceRotation(sides.get(face)[0], rot)};
         if (direction == 1){
             for (int i = 0; i < sides.get(face).length; i++){
-                faceParser(face, rot, temp[i]);
+                faceParser(sides.get(face)[i], rot, temp[i]);
             }
         }else if (direction == -1){
             for (int i = sides.get(face).length - 1; i >= 0 ; i--){
-                faceParser(face, rot, temp[i]);
+                faceParser(sides.get(face)[i], rot, temp[i]);
             }
         }
     }
 
     public void faceParser(String face, int rotation, char [] row){
+        // System.out.println(row);
         switch(face){
             case "F":
                 Front.setRotate(rotation, row);
@@ -91,6 +92,7 @@ public class Cube{
     }
 
     public char[] getFaceRotation(String face, int rotation){
+        // System.out.println(face + " " + rotation);
         switch(face){
             case "F":
                 return Front.getRotate(rotation);
@@ -111,5 +113,9 @@ public class Cube{
 
     public static void main(String [] args){
         Cube cube = new Cube(3);
+        String inst = "B";
+        cube.readInstructions(inst);
+        cube.Up.printFace();
+
     }
 }

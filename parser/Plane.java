@@ -9,7 +9,7 @@ public class Plane {
     public Plane(char c, int dim) {
         rep = c;
         dimensions = dim;
-        face = new char[4][4];
+        face = new char[3][3];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
                 face[i][j] = c;
@@ -23,16 +23,16 @@ public class Plane {
         }
         switch (ind) {
         case 1:
-            setRow(1, row);
+            setRow(0, row);
             break;
         case 2:
-            setRow(3, row);
+            setRow(2, row);
             break;
         case 3:
-            setColumn(1, row);
+            setColumn(0, row);
             break;
         case 4:
-            setColumn(3, row);
+            setColumn(2, row);
             break;
         }
         return (0);
@@ -44,52 +44,64 @@ public class Plane {
         }
         switch (ind) {
             case 1:
-                return getRow(1);
+                return getRow(0);
             case 2:
-                return getRow(3);
+                return getRow(2);
             case 3:
-                return getColumn(1);
+                return getColumn(0);
             case 4:
-                return getColumn(3);
+                return getColumn(2);
             default:
                 return null;
         }
     }
 
     public int setRow(int ind, char[] row) {
-        if (ind >= dimensions || ind < dimensions) {
+        if (ind < 0 || ind >= dimensions) {
             return (-1);
         }
+        System.out.println(rep);
         face[ind] = row;
+        System.out.println(face[ind]);
         return (0);
     }
 
     public int setColumn(int ind, char[] col) {
-        if (ind >= dimensions || ind < dimensions) {
+        if (ind < 0 || ind >= dimensions) {
             return (-1);
         }
         for (int i = 0; i < dimensions; i++) {
-            face[i][ind] = rep;
+            face[i][ind] = col[i];
         }
         return (0);
     }
 
     public char[] getRow(int ind) {
-        if (ind >= dimensions || ind < dimensions) {
+        if (ind < 0 || ind >= dimensions) {
             return null;
         }
+        // System.out.println(face[ind]); 
+        // printFace();               
         return face[ind];
     }
 
     public char[] getColumn(int ind) {
-        if (ind >= dimensions || ind < dimensions) {
+        if (ind < 0 || ind >= dimensions) {
             return null;
         }
-        char[] res = new char[9];
+        char[] res = new char[3];
         for (int i = 0; i < dimensions; i++) {
             res[i] = face[ind][i];
         }
+        System.out.println(res);
         return res;
+    }
+
+    public void printFace(){
+        for (int i = 0; i < dimensions; i++){
+            System.out.println(face[i]);
+        }
+        System.out.println("");
     }
 
 }
