@@ -1,1 +1,1 @@
-java -cp build com.market.Market
+java -cp build com.rubix.Rubix
