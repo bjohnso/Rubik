@@ -1,5 +1,7 @@
 package com.rubix.artifacts;
 
+import java.util.HashMap;
+
 public class Plane {
 
     private String alias;
@@ -23,81 +25,81 @@ public class Plane {
         nodes = temp;
     }
 
-    public void permutate(Plane right, Plane up, Plane left, Plane down, int direction) {
-        //Complete Initial Permutation
+    public void insertStem(Node[] stem, int x, int y, int z) {
+        if (z == 0) {
+            if (y > 1) {
+                this.nodes[x][y] = stem[0];
+                this.nodes[x][y - 1] = stem[1];
+                this.nodes[x][y - 2] = stem[2];
+            } else {
+                this.nodes[x][y] = stem[0];
+                this.nodes[x][y + 1] = stem[1];
+                this.nodes[x][y + 2] = stem[2];
+            }
+        }
+        else {
+            if (x > 1) {
+                this.nodes[x][y] = stem[0];
+                this.nodes[x - 1][y] = stem[1];
+                this.nodes[x - 2][y] = stem[2];
+            } else {
+                this.nodes[x][y] = stem[0];
+                this.nodes[x + 1][y] = stem[1];
+                this.nodes[x + 1][y] = stem[2];
+            }
+        }
+    }
+
+    public Node[] cloneStem(int x, int y, int z) {
+        Node stem[] = new Node[3];
+
+        if (z == 0) {
+            if (y > 1){
+                stem[0] = nodes[x][y];
+                stem[1] = nodes[x][y - 1];
+                stem[2] = nodes[x][y - 2];
+            } else {
+                stem[0] = nodes[x][y];
+                stem[1] = nodes[x][y + 1];
+                stem[2] = nodes[x][y + 2];
+            }
+        } else  {
+            if (x > 1){
+                stem[0] = nodes[x][y];
+                stem[1] = nodes[x - 1][y];
+                stem[2] = nodes[x - 2][y];
+            } else {
+                stem[0] = nodes[x][y];
+                stem[1] = nodes[x + 1][y];
+                stem[2] = nodes[x + 2][y];
+            }
+        }
+
+        return stem;
+    }
+
+    public void rotatePlane(int direction) {
+
         if (direction > 0) {
-            for (int a = 0; a < 2; a++) {
-                Node temp = nodes[0][0];
-                for (int i = 0; i < nodes.length; i++) {
-                    for (int j = 0; j < nodes[i].length; j++) {
-                        if (i == 0) {
-                            if (j < 2)
-                                nodes[i][j] = nodes[i][j + 1];
-                            else
-                                nodes[i][j] = nodes[i + 1][nodes[i + 1].length - 1];
-                        } else if (i == 1) {
-                            j = nodes[i].length - 1;
-                            nodes[i][j] = nodes[i + 1][nodes[i + 1].length - 1];
-                        } else if (i == 2) {
-                            if (j < 2)
-                                nodes[i][nodes[i].length - 1 - j] = nodes[i][nodes.length - 2 - j];
-                            else {
-                                nodes[i][nodes[i].length - 1 - j] = nodes[i - 1][nodes[i].length - 1 - j];
-                                nodes[i - 1][nodes[i].length - 1 - j] = temp;
-                                break ;
-                            }
-                        }
-                    }
-                }
-            }
+            Node[] u = cloneStem(2, 0, 0);
+            Node[] r = cloneStem(0, 2, 1);
+            Node[] d = cloneStem(0, 0, 0);
+            Node[] l = cloneStem(0, 0, 1);
 
-            //Complete implications on adjacent planes
-            Node rightTemp[] = {
-                    right.getNodes()[0][0],
-                    right.getNodes()[1][0],
-                    right.getNodes()[2][0]
-            };
-            Node leftTemp[] = {
-                    left.getNodes()[2][2],
-                    left.getNodes()[1][2],
-                    left.getNodes()[0][2]
-            };
-            if (this.alias.equalsIgnoreCase("F")
-                || this.alias.equalsIgnoreCase("U")
-                || this.alias.equalsIgnoreCase("D")) {
-                for (int i = 0; i < nodes.length; i++) {
-                    right.getNodes()[i][0] = up.getNodes()[i][nodes[i].length - 1 - i];
-                    left.getNodes()[nodes[i].length - 1 - i][nodes[i].length - 1] = down.getNodes()[nodes.length - 1][nodes[i].length - 1 - i];
-                }
+            insertStem(u, 2, 2, 1);
+            insertStem(r, 0, 0, 0);
+            insertStem(d, 2, 0, 1);
+            insertStem(l, 2, 0, 0);
+        } else {
+            Node[] u = cloneStem(2, 2, 0);
+            Node[] l = cloneStem(2, 0, 1);
+            Node[] d = cloneStem(0, 2, 0);
+            Node[] r = cloneStem(2, 2, 1);
 
-                for (int i = 0; i < nodes.length; i++) {
-                    up.getNodes()[0][nodes.length - 1 - i] = leftTemp[i];
-                    down.getNodes()[nodes.length - 1][i] = rightTemp[i];
-                }
-            }
-            else if (this.alias.equalsIgnoreCase("R")){
-                for (int i = 0; i < nodes.length; i++) {
-                    right.getNodes()[i][0] = up.getNodes()[nodes.length - 1 - i][nodes[i].length - 1];
-                    left.getNodes()[nodes[i].length - 1 - i][nodes[i].length - 1] = down.getNodes()[nodes[i].length - 1 - i][nodes[i].length - 1];
-                }
-
-                for (int i = 0; i < nodes.length; i++) {
-                    up.getNodes()[nodes.length - 1 - i][nodes.length - 1] = leftTemp[i];
-                    down.getNodes()[nodes.length - 1 - i][nodes.length - 1] = rightTemp[i];
-                }
-            }
-            else if (this.alias.equalsIgnoreCase("L")){
-                for (int i = 0; i < nodes.length; i++) {
-                    right.getNodes()[i][0] = up.getNodes()[i][0];
-                    left.getNodes()[i][nodes[i].length - 1] = down.getNodes()[nodes.length - 1 - i][0];
-                }
-
-                for (int i = 0; i < nodes.length; i++) {
-                    up.getNodes()[i][0] = leftTemp[i];
-                    down.getNodes()[i][0] = rightTemp[i];
-                }
-            }
-
+            insertStem(u, 2, 0, 1);
+            insertStem(l, 0, 0, 0);
+            insertStem(d, 2, 2, 1);
+            insertStem(r, 2, 0, 0);
         }
     }
 
