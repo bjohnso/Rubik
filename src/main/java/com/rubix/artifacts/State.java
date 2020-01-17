@@ -6,10 +6,24 @@ import java.util.Map;
 
 public class State {
 
-    HashMap<String, Plane> planeMap = new HashMap<String, Plane>();
+    private String rules[];
+    private HashMap<String, Plane> planeMap = new HashMap<String, Plane>();
 
     public State() {
         initPlaneMap();
+        initRules();
+    }
+
+    private void initRules() {
+        String temp[] = {
+            "FRULD",
+            "RBUFD",
+            "BLURD",
+            "LFUBD",
+            "ULBRF",
+            "DLFRB"
+        };
+        rules = temp;
     }
 
     private void initPlaneMap() {
@@ -22,22 +36,19 @@ public class State {
     }
 
     public void permutate(String permutation) {
-        /*String rule = "FLOR";
-        int rule_index = 0;
-        for (int i = 0; i < rule.length(); i++){
-            if (rule.charAt(i) == permutation.charAt(0)){
-                rule_index = i;
+        for (int i = 0; i < rules.length; i++){
+            if (permutation.charAt(0) == rules[i].charAt(0)){
+                planeMap.get(permutation).permutate(planeMap.get(rules[i].charAt(1) + ""),
+                        planeMap.get(rules[i].charAt(2) + ""),
+                        planeMap.get(rules[i].charAt(3) + ""),
+                        planeMap.get(rules[i].charAt(4) + ""),
+                        1);
+                break ;
             }
         }
+    }
 
-        Iterator<Map.Entry<String, Plane>> it = planeMap.entrySet().iterator();
-        while (it.hasNext()){
-            Map.Entry<String, Plane> pair = it.next();
-            if (!pair.getValue().getPolar().equalsIgnoreCase(permutation.charAt(0) + "")) {
-
-            }
-        }*/
-        planeMap.get(permutation).permutate(planeMap.get("R"), planeMap.get("U"), planeMap.get("L"), planeMap.get("D"), 1);
+    public void printState() {
         Iterator<Map.Entry<String, Plane>> it = planeMap.entrySet().iterator();
         while (it.hasNext()){
             Map.Entry<String, Plane> pair = it.next();
