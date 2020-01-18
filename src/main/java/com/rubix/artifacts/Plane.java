@@ -1,15 +1,16 @@
 package com.rubix.artifacts;
 
+import java.awt.*;
 import java.util.HashMap;
 
 public class Plane {
 
     private String alias;
-    private String color;
+    private Color color;
     private String polar;
     private Node nodes[][];
 
-    public Plane(String alias, String color, String polar){
+    public Plane(String alias, Color color, String polar){
         setAlias(alias);
         setColor(color);
         setPolar(polar);
@@ -115,7 +116,7 @@ public class Plane {
         this.alias = alias;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
@@ -123,7 +124,7 @@ public class Plane {
         return alias;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 

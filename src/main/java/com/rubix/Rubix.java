@@ -1,5 +1,6 @@
 package com.rubix;
 
+import com.rubix.artifacts.State;
 import com.rubix.rendering.ui.Window;
 
 import java.util.concurrent.ExecutorService;
@@ -9,6 +10,7 @@ public class Rubix implements Runnable{
 
     private Window window;
     private boolean running;
+    private State state;
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -17,6 +19,28 @@ public class Rubix implements Runnable{
 
     public Rubix(){
         //Initialise Window
+        state = new State();
+        state.permutate("F");
+        state.permutate("U");
+        state.permutate("U");
+        state.permutate("R");
+        state.permutate("U");
+        state.permutate("L");
+
+        state.permutate("L");
+        state.permutate("F");
+        state.permutate("D");
+        state.permutate("B");
+
+        state.permutate("B");
+        state.permutate("R");
+        state.permutate("D");
+        state.permutate("U");
+
+        state.permutate("L");
+        state.permutate("F");
+        state.permutate("B");
+        state.printState();
         this.window = new Window(this);
         start();
     }
@@ -26,7 +50,7 @@ public class Rubix implements Runnable{
     }
 
     private void render() {
-        window.render();
+        window.render(state);
     }
 
     public void run() {

@@ -1,16 +1,18 @@
 package com.rubix.artifacts;
 
+import java.awt.*;
+
 public class Node {
 
     private String id;
-    private String color;
+    private Color color;
 
-    public Node(String id, String color) {
+    public Node(String id, Color color) {
         this.id = id;
         this.color = color;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -18,7 +20,7 @@ public class Node {
         return id;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 

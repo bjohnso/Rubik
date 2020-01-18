@@ -1,5 +1,6 @@
 package com.rubix.artifacts;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -27,12 +28,12 @@ public class State {
     }
 
     private void initPlaneMap() {
-        planeMap.put("F", new Plane("F", "red", "B"));
-        planeMap.put("R", new Plane("R", "green", "L"));
-        planeMap.put("B", new Plane("B", "orange", "F"));
-        planeMap.put("L", new Plane("L", "blue", "R"));
-        planeMap.put("U", new Plane("U", "yellow", "D"));
-        planeMap.put("D", new Plane("D", "white", "U"));
+        planeMap.put("F", new Plane("F", Color.RED, "B"));
+        planeMap.put("R", new Plane("R", Color.GREEN, "L"));
+        planeMap.put("B", new Plane("B", Color.MAGENTA, "F"));
+        planeMap.put("L", new Plane("L", Color.BLUE, "R"));
+        planeMap.put("U", new Plane("U", Color.YELLOW, "D"));
+        planeMap.put("D", new Plane("D", Color.WHITE, "U"));
     }
 
     public void lateral(String permutation, String rule) {
@@ -141,5 +142,9 @@ public class State {
             pair.getValue().printPlane();
             System.out.println("\n");
         }
+    }
+
+    public HashMap<String, Plane> getPlaneMap() {
+        return planeMap;
     }
 }
