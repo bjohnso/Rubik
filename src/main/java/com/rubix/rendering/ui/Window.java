@@ -4,6 +4,7 @@ import com.rubix.Rubix;
 import com.rubix.artifacts.Node;
 import com.rubix.artifacts.Plane;
 import com.rubix.artifacts.State;
+import com.rubix.input.KeyInput;
 import com.rubix.rendering.textures.Texture;
 
 import javax.swing.*;
@@ -11,6 +12,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
+
+import static java.awt.event.KeyEvent.*;
 
 public class Window extends Canvas {
 
@@ -38,10 +41,11 @@ public class Window extends Canvas {
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
 
-        /*Texture background = new Texture("backgrounds/wood", Window.WIDTH, Window.HEIGHT, false);
+        /*Texture background = new Texture("backgrounds/psy1", Window.WIDTH, Window.HEIGHT, false);
         background.render(graphics, 0, 0);*/
 
-        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, Window.HEIGHT / 100 * 10), Color.GREEN, Window.TITLE, Window.HEIGHT / 100 * 10, false);
+        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, Window.HEIGHT / 100 * 10), Color.GREEN, Window.TITLE,
+                Window.HEIGHT / 100 * 10, false);
         initCubePoints();
 
         graphics.setColor(Color.GRAY);
@@ -50,9 +54,26 @@ public class Window extends Canvas {
         }
 
         renderPlanes(graphics, state);
+        renderTelemetry(graphics, state);
 
         graphics.dispose();
         bufferStrategy.show();
+    }
+
+    public void renderTelemetry(Graphics graphics, State state) {
+        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, Window.HEIGHT / 100 * 5), Color.GREEN,
+                "SCRAMBLE : ", (Window.WIDTH / 100 * 3), (Window.HEIGHT / 100 * 20));
+        int newLine = 0;
+        int space = -1;
+        for (int i = 0; i < state.getScramble().length(); i++) {
+            if (i % 5 == 0 && i > 4) {
+                newLine++;
+                space = -1;
+            }
+            Fonts.drawString(graphics, new Font("Arial", Font.BOLD, Window.HEIGHT / 100 * 4), Color.GREEN,
+                    state.getScramble().charAt(i) + "", (Window.WIDTH / 100 * 3) + (Window.WIDTH / 100 * 3 * ++space),
+                    (Window.HEIGHT / 100 * 25) + (Window.HEIGHT / 100 * 5 * newLine));
+        }
     }
 
     public void renderPlanes(Graphics graphics, State state) {

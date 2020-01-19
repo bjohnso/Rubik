@@ -8,9 +8,13 @@ import java.util.Map;
 public class State {
 
     private String rules[];
+    private String scramble;
+    private String solve;
     private HashMap<String, Plane> planeMap = new HashMap<String, Plane>();
 
     public State() {
+        scramble = "";
+        solve = "";
         initPlaneMap();
         initRules();
     }
@@ -133,6 +137,14 @@ public class State {
             }
             break ;
         }
+    }
+
+    public void scrambleAdd(String rotation) {
+        scramble += rotation;
+    }
+
+    public String getScramble() {
+        return scramble;
     }
 
     public void printState() {

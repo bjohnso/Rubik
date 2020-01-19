@@ -1,10 +1,14 @@
 package com.rubix;
 
 import com.rubix.artifacts.State;
+import com.rubix.input.KeyInput;
 import com.rubix.rendering.ui.Window;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static java.awt.event.KeyEvent.*;
+import static java.awt.event.KeyEvent.VK_R;
 
 public class Rubix implements Runnable{
 
@@ -20,33 +24,45 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
-        state.permutate("F");
-        state.permutate("U");
-        state.permutate("U");
-        state.permutate("R");
-        state.permutate("U");
-        state.permutate("L");
-
-        state.permutate("L");
-        state.permutate("F");
-        state.permutate("D");
-        state.permutate("B");
-
-        state.permutate("B");
-        state.permutate("R");
-        state.permutate("D");
-        state.permutate("U");
-
-        state.permutate("L");
-        state.permutate("F");
-        state.permutate("B");
-        state.printState();
         this.window = new Window(this);
         start();
     }
 
     private void tick() {
         //Input Listeners
+        KeyInput keyInput = new KeyInput();
+        window.addKeyListener(keyInput);
+        window.getFrame().addKeyListener(keyInput);
+
+        if (KeyInput.wasPressed(VK_F)){
+            state.permutate("F");
+            state.scrambleAdd("F");
+        }
+
+        if (KeyInput.wasPressed(VK_B)){
+            state.permutate("B");
+            state.scrambleAdd("B");
+        }
+
+        if (KeyInput.wasPressed(VK_U)){
+            state.permutate("U");
+            state.scrambleAdd("U");
+        }
+
+        if (KeyInput.wasPressed(VK_D)){
+            state.permutate("D");
+            state.scrambleAdd("D");
+        }
+
+        if (KeyInput.wasPressed(VK_L)){
+            state.permutate("L");
+            state.scrambleAdd("L");
+        }
+
+        if (KeyInput.wasPressed(VK_R)){
+            state.permutate("R");
+            state.scrambleAdd("R");
+        }
     }
 
     private void render() {
@@ -77,6 +93,8 @@ public class Rubix implements Runnable{
             } else {
                 canRender = false;
             }
+
+            KeyInput.update();
 
             try {
                 Thread.sleep(15);
