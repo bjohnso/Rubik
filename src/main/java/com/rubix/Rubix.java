@@ -2,7 +2,7 @@ package com.rubix;
 
 import com.rubix.artifacts.State;
 import com.rubix.input.KeyInput;
-import com.rubix.rendering.ui.Window;
+import com.rubix.rendering.window.Renderer;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,7 +12,7 @@ import static java.awt.event.KeyEvent.VK_R;
 
 public class Rubix implements Runnable{
 
-    private Window window;
+    private Renderer renderer;
     private boolean running;
     private State state;
 
@@ -24,15 +24,15 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
-        this.window = new Window(this);
+        this.renderer = new Renderer(this);
         start();
     }
 
     private void tick() {
         //Input Listeners
         KeyInput keyInput = new KeyInput();
-        window.addKeyListener(keyInput);
-        window.getFrame().addKeyListener(keyInput);
+        renderer.addKeyListener(keyInput);
+        renderer.getFrame().addKeyListener(keyInput);
 
         if (KeyInput.wasPressed(VK_F)){
             state.permutate("F");
@@ -66,7 +66,7 @@ public class Rubix implements Runnable{
     }
 
     private void render() {
-        window.render(state);
+        renderer.render(state);
     }
 
     public void run() {

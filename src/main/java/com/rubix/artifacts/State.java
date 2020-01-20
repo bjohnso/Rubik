@@ -143,8 +143,16 @@ public class State {
         scramble += rotation;
     }
 
+    public void solveAdd(String solve) {
+        this.solve += solve;
+    }
+
     public String getScramble() {
         return scramble;
+    }
+
+    public String getSolve() {
+        return solve;
     }
 
     public void printState() {
