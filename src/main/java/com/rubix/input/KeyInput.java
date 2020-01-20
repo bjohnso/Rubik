@@ -22,8 +22,6 @@ public class KeyInput extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         if (timer){
             if (future.isDone()){
-                timer = true;
-                future = executorService.submit(inputTimer);
                 keys[e.getKeyCode()] = true;
             }
         }

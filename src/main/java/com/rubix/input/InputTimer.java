@@ -10,7 +10,7 @@ public class InputTimer implements Callable {
 
     @Override
     public Object call() throws Exception {
-        Thread.sleep(50);
+        Thread.sleep(1000);
         return null;
     }
 

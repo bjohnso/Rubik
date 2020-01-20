@@ -30,38 +30,41 @@ public class Rubix implements Runnable{
 
     private void tick() {
         //Input Listeners
+        String arg = "";
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);
         renderer.getFrame().addKeyListener(keyInput);
 
-        if (KeyInput.wasPressed(VK_F)){
-            state.permutate("F");
-            state.scrambleAdd("F");
+        if (!KeyInput.isDown(VK_SHIFT)) {
+            if (KeyInput.wasPressed(VK_F))
+                arg = "F";
+            else if (KeyInput.wasPressed(VK_B))
+                arg = "B";
+            else if (KeyInput.wasPressed(VK_U))
+                arg = "U";
+            else if (KeyInput.wasPressed(VK_D))
+                arg = "D";
+            else if (KeyInput.wasPressed(VK_L))
+                arg = "L";
+            else if (KeyInput.wasPressed(VK_R))
+                arg = "R";
+        } else {
+            if (KeyInput.wasPressed(VK_F))
+                arg = "F'";
+            else if (KeyInput.wasPressed(VK_B))
+                arg = "B'";
+            else if (KeyInput.wasPressed(VK_U))
+                arg = "U'";
+            else if (KeyInput.wasPressed(VK_D))
+                arg = "D'";
+            else if (KeyInput.wasPressed(VK_L))
+                arg = "L'";
+            else if (KeyInput.wasPressed(VK_R))
+                arg = "R'";
         }
-
-        if (KeyInput.wasPressed(VK_B)){
-            state.permutate("B");
-            state.scrambleAdd("B");
-        }
-
-        if (KeyInput.wasPressed(VK_U)){
-            state.permutate("U");
-            state.scrambleAdd("U");
-        }
-
-        if (KeyInput.wasPressed(VK_D)){
-            state.permutate("D");
-            state.scrambleAdd("D");
-        }
-
-        if (KeyInput.wasPressed(VK_L)){
-            state.permutate("L");
-            state.scrambleAdd("L");
-        }
-
-        if (KeyInput.wasPressed(VK_R)){
-            state.permutate("R");
-            state.scrambleAdd("R");
+        if (!arg.equals("")){
+            state.permutate(arg);
+            state.scrambleAdd(arg);
         }
     }
 
