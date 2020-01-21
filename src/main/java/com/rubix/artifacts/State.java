@@ -43,33 +43,34 @@ public class State {
     public Node[][] cloneRotation(String rotation) {
         String rule = getRule(rotation.charAt(0));
         Node stems[][] = new Node[4][3];
-        if (rotation.length() == 1) {
-            if (rotation.equalsIgnoreCase("F")) {
+        if (rotation.length() == 1 || (rotation.length() > 1 && rotation.charAt(1) == '2')) {
+            System.out.println(rotation);
+            if (rotation.charAt(0) == 'F') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 1);
                 stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 0);
                 stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 1);
-            } else if (rotation.equalsIgnoreCase("B")) {
+            } else if (rotation.charAt(0) == 'B') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
                 stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
                 stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("U")) {
+            } else if (rotation.charAt(0) == 'U') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 0);
                 stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
                 stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 0);
-            } else if (rotation.equalsIgnoreCase("D")) {
+            } else if (rotation.charAt(0) == 'D') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 2, 0);
                 stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
                 stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 0, 0);
-            } else if (rotation.equalsIgnoreCase("L")) {
+            } else if (rotation.charAt(0) == 'L') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 1);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
                 stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 1);
                 stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("R")) {
+            } else if (rotation.charAt(0) == 'R') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 2, 1);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
                 stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 1);
@@ -113,33 +114,33 @@ public class State {
 
     public void insertRotation(String rotation, Node[][] stems) {
         String rule = getRule(rotation.charAt(0));
-        if (rotation.length() == 1) {
-            if (rotation.equalsIgnoreCase("F")) {
+        if (rotation.length() == 1 || (rotation.length() > 1 && rotation.charAt(1) == '2')) {
+            if (rotation.charAt(0) == 'F') {
                 planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
                 planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
                 planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
                 planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
-            } else if (rotation.equalsIgnoreCase("B")) {
+            } else if (rotation.charAt(0) == 'B') {
                 planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
                 planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
                 planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
                 planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("U")) {
+            } else if (rotation.charAt(0) == 'U') {
                 planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
                 planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 0);
                 planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
                 planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 0);
-            } else if (rotation.equalsIgnoreCase("D")) {
+            } else if (rotation.charAt(0) == 'D') {
                 planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
                 planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 0, 0, 0);
                 planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
                 planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 0, 0, 0);
-            } else if (rotation.equalsIgnoreCase("L")) {
+            } else if (rotation.charAt(0) == 'L') {
                 planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 1);
                 planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
                 planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 1);
                 planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("R")) {
+            } else if (rotation.charAt(0) == 'R') {
                 planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 2, 1);
                 planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
                 planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 1);
@@ -190,8 +191,6 @@ public class State {
                         planeMap.get(permutation.charAt(0) + "").rotatePlane(-1);
                     else
                         planeMap.get(permutation.charAt(0) + "").rotatePlane(1);
-
-                    System.out.println("ROTATE! " + permutation);
 
                     insertRotation(permutation, cloneRotation(permutation));
 

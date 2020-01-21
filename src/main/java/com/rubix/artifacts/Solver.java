@@ -17,21 +17,23 @@ public class Solver {
         Node stems[][] = null;
         String observeRule = state.getRule('U');
         while (++i < 5){
-            //Target UP
+            boolean solved = false;
             stems = state.cloneRotation(observeRule.charAt(i) + "");
             String rotationRule = state.getRule(observeRule.charAt(i));
-            System.out.println(i + " : " + rotationRule.charAt(0));
             for (int j = 0; j < stems.length; j++){
                 for (int k = 0; k < stems[j].length; k++){
                     if (nodeCompare(stems[j][k], Color.WHITE, "EDGE") == 0) {
-                        System.out.println("MATCH");
                         String ro = calculatePermutation(rotationRule, rotationRule.charAt(j + 1) + "", "U");
-                        System.out.println(ro);
                         state.permutate(ro);
                         j = stems.length;
+                        solved = true;
                         break ;
                     }
                 }
+            }
+
+            if (!solved) {
+
             }
         }
 
@@ -49,8 +51,6 @@ public class Solver {
                 target_pos = i;
             }
         }
-
-        System.out.println("TARGET POS: " + target_pos + " SOURCE POS: " + source_pos);
 
         //ROTATION IS ANTI-CLOCKWISE
         if (target_pos - source_pos == -1) {
