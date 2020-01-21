@@ -6,11 +6,17 @@ public class Node {
 
     private String id;
     private Color color;
+    private String type;
 
-    public Node(String id, Color color) {
+    public Node(String id, Color color, String type) {
         this.id = id;
         this.color = color;
+        this.type = type;
     }
+
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 
     public Color getColor() {
         return color;

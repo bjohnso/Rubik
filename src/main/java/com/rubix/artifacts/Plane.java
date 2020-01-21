@@ -19,9 +19,9 @@ public class Plane {
 
     public void initNodes() {
         Node temp[][] = {
-                {new Node("DL", this.getColor()), new Node("DM", this.getColor()), new Node("DR", this.getColor())},
-                {new Node("ML", this.getColor()), new Node("MM", this.getColor()), new Node("MR", this.getColor())},
-                {new Node("UL", this.getColor()), new Node("UM", this.getColor()), new Node("UR", this.getColor())}
+                {new Node("DL", this.getColor(), "CORNER"), new Node("DM", this.getColor(), "EDGE"), new Node("DR", this.getColor(), "CORNER")},
+                {new Node("ML", this.getColor(), "EDGE"), new Node("MM", this.getColor(), "MIDDLE"), new Node("MR", this.getColor(), "EDGE")},
+                {new Node("UL", this.getColor(), "CORNER"), new Node("UM", this.getColor(), "EDGE"), new Node("UR", this.getColor(),"CORNER")}
         };
         nodes = temp;
     }

@@ -1,5 +1,6 @@
 package com.rubix;
 
+import com.rubix.artifacts.Solver;
 import com.rubix.artifacts.State;
 import com.rubix.input.KeyInput;
 import com.rubix.rendering.window.Renderer;
@@ -13,6 +14,7 @@ import static java.awt.event.KeyEvent.VK_R;
 public class Rubix implements Runnable{
 
     private Renderer renderer;
+    private Solver solver;
     private boolean running;
     private State state;
 
@@ -25,6 +27,8 @@ public class Rubix implements Runnable{
         //Initialise Window
         state = new State();
         this.renderer = new Renderer(this);
+        this.solver = new Solver();
+        state = solver.solveWhiteCross(state);
         start();
     }
 
@@ -35,20 +39,7 @@ public class Rubix implements Runnable{
         renderer.addKeyListener(keyInput);
         renderer.getFrame().addKeyListener(keyInput);
 
-        if (!KeyInput.isDown(VK_SHIFT)) {
-            if (KeyInput.wasPressed(VK_F))
-                arg = "F";
-            else if (KeyInput.wasPressed(VK_B))
-                arg = "B";
-            else if (KeyInput.wasPressed(VK_U))
-                arg = "U";
-            else if (KeyInput.wasPressed(VK_D))
-                arg = "D";
-            else if (KeyInput.wasPressed(VK_L))
-                arg = "L";
-            else if (KeyInput.wasPressed(VK_R))
-                arg = "R";
-        } else {
+        if (KeyInput.isDown(VK_SHIFT)) {
             if (KeyInput.wasPressed(VK_F))
                 arg = "F'";
             else if (KeyInput.wasPressed(VK_B))
@@ -61,6 +52,25 @@ public class Rubix implements Runnable{
                 arg = "L'";
             else if (KeyInput.wasPressed(VK_R))
                 arg = "R'";
+        } else if (KeyInput.isDown(VK_CONTROL)) {
+            if (KeyInput.wasPressed((VK_G))){
+                renderer.toggleGridVisible();
+            } else if (KeyInput.wasPressed(VK_S)){
+                state = solver.solveWhiteCross(state);
+            }
+        } else {
+            if (KeyInput.wasPressed(VK_F))
+                arg = "F";
+            else if (KeyInput.wasPressed(VK_B))
+                arg = "B";
+            else if (KeyInput.wasPressed(VK_U))
+                arg = "U";
+            else if (KeyInput.wasPressed(VK_D))
+                arg = "D";
+            else if (KeyInput.wasPressed(VK_L))
+                arg = "L";
+            else if (KeyInput.wasPressed(VK_R))
+                arg = "R";
         }
         if (!arg.equals("")){
             state.permutate(arg);
@@ -112,7 +122,7 @@ public class Rubix implements Runnable{
 
             if (System.currentTimeMillis() - 1000 > timer){
                 timer += 1000;
-                System.out.printf("FPS: %d | TPS: %d\n", fps, tps);
+                //System.out.printf("FPS: %d | TPS: %d\n", fps, tps);
                 fps = 0;
                 tps = 0;
             }

@@ -40,119 +40,144 @@ public class State {
         planeMap.put("D", new Plane("D", Color.WHITE, "U"));
     }
 
-    public void lateral(String permutation, String rule) {
+    public Node[][] cloneRotation(String rotation) {
+        String rule = getRule(rotation.charAt(0));
         Node stems[][] = new Node[4][3];
-        //Handles F, F', B, B'
-        if (permutation.charAt(0) == 'F' && permutation.length() == 1) {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-            stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 1);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 0);
-            stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 1);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
-        } else if (permutation.charAt(0) == 'F' && permutation.length() > 1 && permutation.charAt(1) == '\'') {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
-            stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 1);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 1);
-        } else if (permutation.charAt(0) == 'B' && permutation.length() == 1) {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
-            stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
-        } else if (permutation.charAt(0) == 'B' && permutation.length() > 1 && permutation.charAt(1) == '\'') {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
-            stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
+        if (rotation.length() == 1) {
+            if (rotation.equalsIgnoreCase("F")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
+                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 0);
+                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 1);
+            } else if (rotation.equalsIgnoreCase("B")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
+                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
+                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("U")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
+                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 0);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
+                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 0);
+            } else if (rotation.equalsIgnoreCase("D")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
+                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 2, 0);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
+                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 0, 0);
+            } else if (rotation.equalsIgnoreCase("L")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 1);
+                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 1);
+                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("R")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 2, 1);
+                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 1);
+                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 1);
+            }
+        } else if (rotation.length() > 1 && rotation.charAt(1) == '\''){
+            if (rotation.equalsIgnoreCase("F'")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
+                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
+                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("B'")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
+                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 0, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 0);
+                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 2, 1);
+            } else if (rotation.equalsIgnoreCase("U'")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
+                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 0);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
+                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 0);
+            } else if (rotation.equalsIgnoreCase("D'")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
+                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 0);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
+                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 0);
+            } else if (rotation.equalsIgnoreCase("L'")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 1);
+                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 1);
+                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("R'")) {
+                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 2, 1);
+                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 1);
+                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 1);
+                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
+            }
         }
+        return stems;
     }
 
-    public void vertical(String permutation, String rule) {
-        Node stems[][] = new Node[4][3];
-        //Handles U, U', D, D'
-        if (permutation.charAt(0) == 'U' && permutation.length() == 1) {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
-            stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 0);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 0);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 0);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 0);
-        } else if (permutation.charAt(0) == 'D' && permutation.length() == 1) {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-            stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 2, 0);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 0, 0);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 0, 0, 0);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 0, 0, 0);
-        } else if (permutation.charAt(0) == 'U' && permutation.length() > 1 && permutation.charAt(1) == '\'') {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
-            stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 0);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 0);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 0);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 0);
-        } else if (permutation.charAt(0) == 'D' && permutation.length() > 1 && permutation.charAt(1) == '\'') {
-            stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-            stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 0);
-            stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-            stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 0);
-
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 0, 2, 0);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 0);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 0, 0, 0);
-        }
-    }
-
-    public void horizontal(String permutation, String rule) {
-        Node stems[][] = new Node[4][3];
-        //Handles L, L', R, R'
-        if (permutation.charAt(0) == 'L' || (permutation.charAt(0) == 'R' && permutation.length() > 1 && permutation.charAt(1) == '\'')) {
-            for (int i = 0; i < 4; i++) {
-                stems[i] = planeMap.get(rule.charAt(i + 1) + "").cloneStem(2, 0, 1);
+    public void insertRotation(String rotation, Node[][] stems) {
+        String rule = getRule(rotation.charAt(0));
+        if (rotation.length() == 1) {
+            if (rotation.equalsIgnoreCase("F")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
+            } else if (rotation.equalsIgnoreCase("B")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("U")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 0);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 0);
+            } else if (rotation.equalsIgnoreCase("D")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 0, 0, 0);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 0, 0, 0);
+            } else if (rotation.equalsIgnoreCase("L")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 1);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 1);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("R")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 2, 1);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 1);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
             }
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 1);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 1);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
-        } else if (permutation.charAt(0) == 'R' || (permutation.charAt(0) == 'L' && permutation.length() > 1 && permutation.charAt(1) == '\'')) {
-            for (int i = 0; i < 4; i++) {
-                stems[i] = planeMap.get(rule.charAt(i + 1) + "").cloneStem(2, 2, 1);
+        } else if (rotation.length() > 1 && rotation.charAt(1) == '\''){
+            if (rotation.equalsIgnoreCase("F'")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 2, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("B'")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 2, 1);
+            } else if (rotation.equalsIgnoreCase("U'")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 0);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 0);
+            } else if (rotation.equalsIgnoreCase("D'")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 0, 0, 0);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 0, 0, 0);
+            } else if (rotation.equalsIgnoreCase("L'")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 1);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 1);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 1);
+            } else if (rotation.equalsIgnoreCase("R'")) {
+                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 2, 1);
+                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 2, 1);
+                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 1);
+                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 2, 1);
             }
-            planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 2, 1);
-            planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
-            planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 1);
-            planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
         }
-
     }
 
     public void permutate(String permutation) {
@@ -165,15 +190,14 @@ public class State {
                         planeMap.get(permutation.charAt(0) + "").rotatePlane(-1);
                     else
                         planeMap.get(permutation.charAt(0) + "").rotatePlane(1);
-                    if (permutation.charAt(0) == 'F'
-                        || permutation.charAt(0) == 'B'){
-                        lateral(permutation, rules[i]);
-                    } else if (permutation.charAt(0) == 'U'
-                            || permutation.charAt(0) == 'D') {
-                        vertical(permutation, rules[i]);
-                    } else if (permutation.charAt(0) == 'L'
-                            || permutation.charAt(0) == 'R') {
-                        horizontal(permutation, rules[i]);
+
+                    System.out.println("ROTATE! " + permutation);
+
+                    insertRotation(permutation, cloneRotation(permutation));
+
+                    if (permutation.length() > 1 && permutation.charAt(1) == '2') {
+                        planeMap.get(permutation.charAt(0) + "").rotatePlane(1);
+                        insertRotation(permutation, cloneRotation(permutation));
                     }
                     break ;
                 }
@@ -182,8 +206,20 @@ public class State {
         }
     }
 
-    public void generateSolve() {
+    public String getRule(char rotation){
+        String rule = "";
 
+        for (int i = 0; i < rules.length; i++){
+            if (rotation == rules[i].charAt(0)) {
+                rule = rules[i];
+                break ;
+            }
+        }
+        return rule;
+    }
+
+    public String[] getRules() {
+        return rules;
     }
 
     public void scrambleAdd(String rotation) {

@@ -36,6 +36,7 @@ public class Renderer extends Canvas {
     private int gridSize = 16;
 
     private JFrame frame;
+    private boolean gridVisible = false;
 
     public void render(State state){
         BufferStrategy bufferStrategy = getBufferStrategy();
@@ -51,7 +52,8 @@ public class Renderer extends Canvas {
         Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 10), Color.GREEN, TITLE,
                 windowHeight / 100 * 10, false);
 
-        drawFrame(graphics);
+        if (gridVisible)
+            drawFrame(graphics);
         drawCube(graphics);
         renderPlanes(graphics, state);
         renderTelemetry(graphics, state);
@@ -251,6 +253,15 @@ public class Renderer extends Canvas {
 
     public JFrame getFrame() {
         return frame;
+    }
+
+    public void toggleGridVisible() {
+        this.gridVisible = gridVisible;
+        if (this.gridVisible == true) {
+            this.gridVisible = false;
+        } else {
+            this.gridVisible = true;
+        }
     }
 
     public Renderer(final Rubix rubix){
