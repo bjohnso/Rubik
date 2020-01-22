@@ -28,7 +28,30 @@ public class Rubix implements Runnable{
         state = new State();
         this.renderer = new Renderer(this);
         this.solver = new Solver();
-        state = solver.solveWhiteCross(state);
+
+        state.permutate("F");
+        state.permutate("U");
+        state.permutate("B");
+        state.permutate("B");
+        state.permutate("F");
+        state.permutate("L");
+        state.permutate("F");
+        state.permutate("D");
+        state.permutate("F");
+        state.permutate("R");
+        state.permutate("F");
+        state.permutate("R");
+        state.permutate("D");
+        state.permutate("L");
+        state.permutate("D");
+        state.permutate("R");
+        state.permutate("L'");
+        state.permutate("B");
+
+        /*state = solver.solveWhiteCross(state);
+        state.permutate("F");
+        state.permutate("R");
+        state = solver.solveWhiteCross(state);*/
         start();
     }
 
@@ -55,8 +78,6 @@ public class Rubix implements Runnable{
         } else if (KeyInput.isDown(VK_CONTROL)) {
             if (KeyInput.wasPressed((VK_G))){
                 renderer.toggleGridVisible();
-            } else if (KeyInput.wasPressed(VK_S)){
-                state = solver.solveWhiteCross(state);
             }
         } else {
             if (KeyInput.wasPressed(VK_F))
@@ -71,6 +92,12 @@ public class Rubix implements Runnable{
                 arg = "L";
             else if (KeyInput.wasPressed(VK_R))
                 arg = "R";
+            else if (KeyInput.wasReleased(VK_1)){
+                state = solver.solveDaisy(state);
+            }
+            else if (KeyInput.wasReleased(VK_2)){
+                state = solver.solveCross(state);
+            }
         }
         if (!arg.equals("")){
             state.permutate(arg);
@@ -135,6 +162,7 @@ public class Rubix implements Runnable{
         if (running)
             return;
         running = true;
+        KeyInput.createTimer();
         new Thread(this, "RubixMain-Thread").start();
     }
 

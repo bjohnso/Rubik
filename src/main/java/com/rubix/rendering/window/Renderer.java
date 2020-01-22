@@ -161,7 +161,7 @@ public class Renderer extends Canvas {
     }
 
     public void renderTelemetry(Graphics graphics, State state) {
-        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.RED,
+        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.RED,
                 "SCRAMBLE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 20));
         int newLine = 0;
         int space = -1;
@@ -170,12 +170,12 @@ public class Renderer extends Canvas {
                 newLine++;
                 space = -1;
             }
-            Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 2), Color.RED,
+            Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.RED,
                     state.getScramble().charAt(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
                     (windowHeight / 100 * 25) + (windowHeight / 100 * 5 * newLine));
         }
 
-        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.GREEN,
+        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.GREEN,
                 "SOLVE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 60));
         newLine = 0;
         space = -1;
@@ -184,9 +184,9 @@ public class Renderer extends Canvas {
                 newLine++;
                 space = -1;
             }
-            Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 2), Color.GREEN,
+            Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.GREEN,
                     state.getSolve().charAt(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
-                    (windowHeight / 100 * 25) + (windowHeight / 100 * 5 * newLine));
+                    (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * newLine));
         }
     }
 

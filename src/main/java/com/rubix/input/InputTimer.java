@@ -2,16 +2,16 @@ package com.rubix.input;
 
 import java.util.concurrent.Callable;
 
-public class InputTimer implements Callable {
+public class InputTimer implements Runnable {
 
     public InputTimer(){
 
     }
 
     @Override
-    public Object call() throws Exception {
-        Thread.sleep(1000);
-        return null;
-    }
+    public void run() {
+        while (true){
 
+        }
+    }
 }

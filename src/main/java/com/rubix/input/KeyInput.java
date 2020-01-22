@@ -2,9 +2,8 @@ package com.rubix.input;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class KeyInput extends KeyAdapter {
 
@@ -12,24 +11,28 @@ public class KeyInput extends KeyAdapter {
 
     private static final boolean keys[] = new boolean[NUM_KEYS];
     private static final boolean lastKeys[] = new boolean[NUM_KEYS];
-    private boolean timer = false;
+    private static boolean timer = false;
 
-    private InputTimer inputTimer = new InputTimer();
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private Future<Object> future;
+
+    public static void createTimer() {
+        Timer delayTimer = new Timer();
+        delayTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                timer = false;
+            }
+        }, 0, 1000);
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (timer){
-            if (future.isDone()){
+        /*if (!timer) {
+            if (!keys[e.getKeyCode()]) {*/
                 keys[e.getKeyCode()] = true;
-            }
-        }
-        else {
-            timer = true;
-            future = executorService.submit(inputTimer);
-            keys[e.getKeyCode()] = true;
-        }
+                /*timer = true;*/
+      /*      }
+        }*/
     }
 
     @Override

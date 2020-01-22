@@ -44,7 +44,6 @@ public class State {
         String rule = getRule(rotation.charAt(0));
         Node stems[][] = new Node[4][3];
         if (rotation.length() == 1 || (rotation.length() > 1 && rotation.charAt(1) == '2')) {
-            System.out.println(rotation);
             if (rotation.charAt(0) == 'F') {
                 stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
                 stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 1);
@@ -182,6 +181,7 @@ public class State {
     }
 
     public void permutate(String permutation) {
+        System.out.println("NEW ROTATION : " + permutation);
         Iterator<Map.Entry<String, Plane>> it = planeMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, Plane> pair = it.next();
@@ -210,7 +210,7 @@ public class State {
 
         for (int i = 0; i < rules.length; i++){
             if (rotation == rules[i].charAt(0)) {
-                rule = rules[i];
+                rule += rules[i];
                 break ;
             }
         }
