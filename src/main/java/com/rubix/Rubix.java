@@ -29,7 +29,7 @@ public class Rubix implements Runnable{
         this.renderer = new Renderer(this);
         this.solver = new Solver();
 
-        state.permutate("F");
+        /*state.permutate("F");
         state.permutate("U");
         state.permutate("B");
         state.permutate("B");
@@ -46,7 +46,7 @@ public class Rubix implements Runnable{
         state.permutate("D");
         state.permutate("R");
         state.permutate("L'");
-        state.permutate("B");
+        state.permutate("B");*/
 
         /*state = solver.solveWhiteCross(state);
         state.permutate("F");

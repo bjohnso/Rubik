@@ -127,6 +127,58 @@ public class Solver {
         return state;
     }
 
+    public void solveF1(State state) {
+        state.solveAdd("L1");
+        Node stemsUp[][] = null;
+        Node stemsDown[][] = null;
+        String observeRuleUp = state.getRule('U');
+        String observeRuleDown = state.getRule('D');
+
+        int i = 0;
+        int solveCount = 0;
+        int backtrack = 0;
+        boolean solved = false;
+        while (solveCount < 4) {
+            if (++i > 4) {
+                i = 1;
+            }
+            if (solved) {
+                if (++solveCount == 4)
+                    break;
+                solved = false;
+                while (backtrack > 0) {
+                    if (i < 2)
+                        i = 5;
+                    backtrack--;
+                    i--;
+                    state.permutate("U'");
+                }
+                backtrack = 0;
+            }
+
+            Plane plane1 = state.getPlaneMap().get(observeRuleUp.charAt(i) + "");
+            Plane plane2;
+            if (i > 3)
+                plane2 = state.getPlaneMap().get(observeRuleUp.charAt(1) + "");
+            else
+                plane2 = state.getPlaneMap().get(observeRuleUp.charAt(i + 1) + "");
+            Node node1 = plane1.getNodes()[1][1];
+            Node node2 = plane2.getNodes()[1][1];
+            stemsDown = state.cloneRotation("U");
+
+            for (int j = 0; j < stemsDown.length; j++) {
+                if (nodeCompareColor(stemsDown[j][0], node1.getColor()) != 0) {
+
+                } else {
+                    if (nodeCompareColor(stemsDown[j][0], node2.getColor()) != 0) {
+
+                    }
+                }
+            }
+        }
+        return;
+    }
+
     public String calculatePermutation(String rule, String source, String target) {
         int source_pos = 0;
         int target_pos = 0;
@@ -168,6 +220,23 @@ public class Solver {
             return face + "'";
     }
 
+    public int nodeSearch2D(Node[][] stems, Color color1, Color color2) {
+        int dimension = 0;
+        for (int i = 0; i < stems.length; i++) {
+            for (int j = 0; j < stems[i].length; j++){
+                if (stems[i][j].getColor() == color1){
+                    dimension++;
+                } else {
+                    dimension = 0;
+                }
+                if (dimension == 2)
+                    return 1;
+            }
+        }
+        if (dimension == 1){
+            if (stems[0][0].getColor() == color2)
+        }
+    }
 
     public int nodeCompareColor(Node a, Color color) {
         if (a.getColor() == color)
