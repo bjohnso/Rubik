@@ -10,7 +10,7 @@ import static com.rubix.runes.Runes.*;
 public class State {
 
     private String rules[];
-    private String scramble;
+    private ArrayList<String> scramble = new ArrayList<>();
     private String solve;
     private HashMap<String, Cubicle> cube = new HashMap<>();
     private HashMap<String, String[]> cubicleRotations = new HashMap<>();
@@ -75,7 +75,6 @@ public class State {
     }
 
     public void rotate(String rotation, int direction) {
-        System.out.println("NEW ROTATION : " + rotation + " DIRECTION : " + direction);
         String rule[] = cubicleRotations.get(rotation);
         HashMap<String, Cubicle> clone = cloneCube();
         if (direction > 0){
@@ -98,6 +97,10 @@ public class State {
             }
         }
         updateNodes(rotation, direction);
+        if (direction > 0)
+            addScramble(rotation);
+        else
+            addScramble(rotation + '\'');
     }
 
     public void updateNodes(String rotation, int direction) {
@@ -136,5 +139,25 @@ public class State {
         System.out.println(cube.get("213").getNode3D().getHomeCubicle());
         System.out.println(cube.get("113").getNode3D().getHomeCubicle());
         System.out.println(cube.get("112").getNode3D().getHomeCubicle());
+    }
+
+    public ArrayList<String> getScramble() {
+        return scramble;
+    }
+
+    public String getSolve() {
+        return solve;
+    }
+
+    public void setScramble(ArrayList<String> scramble) {
+        this.scramble = scramble;
+    }
+
+    public void addScramble(String scramble) {
+        this.scramble.add(scramble);
+    }
+
+    public void setSolve(String solve) {
+        this.solve = solve;
     }
 }

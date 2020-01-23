@@ -26,14 +26,6 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
-        state.rotate("F", -1);
-        state.printNodes();
-        /*state.rotate("F", 1);*/
-        //System.out.println(state.getCube().get("111").getNode3D().getFace("L"));
-        //state.rotate("F", 1);
-        //System.out.println(state.getCube().get("111").getNode3D().getFace("L"));
-        //state.rotate("F", 1);
-        //System.out.println(state.getCube().get("111").getNode3D().getFace("L"));
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);

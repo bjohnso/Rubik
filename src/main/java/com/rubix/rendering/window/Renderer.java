@@ -57,6 +57,7 @@ public class Renderer extends Canvas {
         drawCube(graphics);
         if (state.getCube() != null)
             renderPlanes(graphics, state);
+        renderTelemetry(graphics, state);
         graphics.dispose();
         bufferStrategy.show();
     }
@@ -160,18 +161,18 @@ public class Renderer extends Canvas {
         }
     }
 
-    /*public void renderTelemetry(Graphics graphics, State state) {
+    public void renderTelemetry(Graphics graphics, State state) {
         Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.RED,
                 "SCRAMBLE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 20));
         int newLine = 0;
         int space = -1;
-        for (int i = 0; i < state.getScramble().length(); i++) {
+        for (int i = 0; i < state.getScramble().size(); i++) {
             if (i % 5 == 0 && i > 4) {
                 newLine++;
                 space = -1;
             }
             Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.RED,
-                    state.getScramble().charAt(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
+                    state.getScramble().get(i), (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
                     (windowHeight / 100 * 25) + (windowHeight / 100 * 5 * newLine));
         }
 
@@ -179,7 +180,7 @@ public class Renderer extends Canvas {
                 "SOLVE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 60));
         newLine = 0;
         space = -1;
-        for (int i = 0; i < state.getSolve().length(); i++) {
+        /*for (int i = 0; i < state.getSolve().length(); i++) {
             if (i % 5 == 0 && i > 4) {
                 newLine++;
                 space = -1;
@@ -187,8 +188,8 @@ public class Renderer extends Canvas {
             Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.GREEN,
                     state.getSolve().charAt(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
                     (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * newLine));
-        }
-    }*/
+        }*/
+    }
 
     public void renderPlanes(Graphics graphics, State state) {
         int plane_width = cubePoints.get("center_depth").getX() - cubePoints.get("left_depth").getX();
