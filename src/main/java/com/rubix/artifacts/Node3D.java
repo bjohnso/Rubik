@@ -10,9 +10,9 @@ import static com.rubix.runes.Runes.*;
 
 public class Node3D {
 
-    String currentCubicle;
-    String homeCubicle;
-    HashMap<String, Color> faceMap = new HashMap<>();
+    private String currentCubicle;
+    private String homeCubicle;
+    private HashMap<String, Color> faceMap = new HashMap<>();
 
     public Node3D(String homeCubicle) {
         this.homeCubicle = homeCubicle;
@@ -27,7 +27,7 @@ public class Node3D {
             boolean replaced = false;
             switch (rotate){
                 case "F":
-                    for (int i = 0; i < ROTATION_FACES_F.length; i++) {
+                    for (int i = 0; i < ROTATION_FACES_F.length - 1; i++) {
                         if (ROTATION_FACES_F[i].equalsIgnoreCase(face)) {
                             newMap.put(ROTATION_FACES_F[i + 1], pair.getValue());
                             replaced = true;
@@ -36,7 +36,7 @@ public class Node3D {
                     }
                     break ;
                 case "B":
-                    for (int i = 0; i < ROTATION_FACES_B.length; i++) {
+                    for (int i = 0; i < ROTATION_FACES_B.length - 1; i++) {
                         if (ROTATION_FACES_B[i].equalsIgnoreCase(face)) {
                             newMap.put(ROTATION_FACES_B[i + 1], pair.getValue());
                             replaced = true;
@@ -45,7 +45,7 @@ public class Node3D {
                     }
                     break ;
                 case "U":
-                    for (int i = 0; i < ROTATION_FACES_U.length; i++) {
+                    for (int i = 0; i < ROTATION_FACES_U.length - 1; i++) {
                         if (ROTATION_FACES_U[i].equalsIgnoreCase(face)) {
                             newMap.put(ROTATION_FACES_U[i + 1], pair.getValue());
                             replaced = true;
@@ -54,7 +54,7 @@ public class Node3D {
                     }
                     break ;
                 case "D":
-                    for (int i = 0; i < ROTATION_FACES_D.length; i++) {
+                    for (int i = 0; i < ROTATION_FACES_D.length - 1; i++) {
                         if (ROTATION_FACES_D[i].equalsIgnoreCase(face)) {
                             newMap.put(ROTATION_FACES_D[i + 1], pair.getValue());
                             replaced = true;
@@ -63,7 +63,7 @@ public class Node3D {
                     }
                     break ;
                 case "L":
-                    for (int i = 0; i < ROTATION_FACES_L.length; i++) {
+                    for (int i = 0; i < ROTATION_FACES_L.length - 1; i++) {
                         if (ROTATION_FACES_L[i].equalsIgnoreCase(face)) {
                             newMap.put(ROTATION_FACES_L[i + 1], pair.getValue());
                             replaced = true;
@@ -72,7 +72,7 @@ public class Node3D {
                     }
                     break ;
                 case "R":
-                    for (int i = 0; i < ROTATION_FACES_R.length; i++) {
+                    for (int i = 0; i < ROTATION_FACES_R.length - 1; i++) {
                         if (ROTATION_FACES_R[i].equalsIgnoreCase(face)) {
                             newMap.put(ROTATION_FACES_R[i + 1], pair.getValue());
                             replaced = true;
@@ -86,7 +86,6 @@ public class Node3D {
         }
         faceMap.clear();
         faceMap = newMap;
-        newMap.clear();
     }
 
     public void addFace(String face, Color color) {
@@ -117,5 +116,13 @@ public class Node3D {
 
     public boolean isSolved() {
         return currentCubicle == homeCubicle ? true : false;
+    }
+
+    public void printFaces() {
+        Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
+
+        while (it.hasNext()){
+            System.out.println(it.next().getKey());
+        }
     }
 }

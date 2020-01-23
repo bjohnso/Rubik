@@ -6,9 +6,10 @@ public class Cubicle {
     private Node3D node3D;
     private String position;
 
-    public Cubicle(String position) {
+    public Cubicle(String position, boolean init) {
         this.position = position;
-        initNode();
+        if (init)
+            initNode();
     }
 
     private void initNode() {
@@ -46,7 +47,7 @@ public class Cubicle {
     }
 
     public Cubicle clone() {
-        Cubicle clone = new Cubicle(position);
+        Cubicle clone = new Cubicle(position, false);
         clone.setNode3D(node3D);
         return clone;
     }

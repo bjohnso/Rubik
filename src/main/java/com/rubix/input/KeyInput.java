@@ -13,19 +13,23 @@ public class KeyInput extends KeyAdapter {
     private static final boolean lastKeys[] = new boolean[NUM_KEYS];
     private static boolean timer = false;
 
-    public static void createTimer() {
+    private void createTimer() {
+        timer = true;
         Timer delayTimer = new Timer();
-        delayTimer.scheduleAtFixedRate(new TimerTask() {
+        delayTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 timer = false;
             }
-        }, 0, 1000);
+        }, 100);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        keys[e.getKeyCode()] = true;
+        if (!timer) {
+            keys[e.getKeyCode()] = true;
+            createTimer();
+        }
     }
 
     @Override

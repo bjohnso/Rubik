@@ -17,41 +17,41 @@ public class Runes {
             "131",
             "132",
             "133",
-            "231",
             "233",
-            "331",
+            "333",
             "332",
-            "333"
+            "331",
+            "231"
     };
     public static final String ROTATION_NODES_U[] = {
             "311",
-            "312",
-            "313",
             "321",
-            "323",
             "331",
             "332",
-            "333"
+            "333",
+            "323",
+            "313",
+            "312"
     };
     public static final String ROTATION_NODES_D[] = {
             "111",
             "112",
             "113",
-            "121",
             "123",
-            "131",
+            "133",
             "132",
-            "133"
+            "131",
+            "121"
     };
     public static final String ROTATION_NODES_L[] = {
             "111",
-            "211",
-            "311",
-            "321",
-            "331",
-            "231",
+            "121",
             "131",
-            "121"
+            "231",
+            "331",
+            "321",
+            "311",
+            "211"
     };
     public static final String ROTATION_NODES_R[] = {
             "113",

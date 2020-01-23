@@ -26,8 +26,14 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
-        state.rotate("F", 1);
+        state.rotate("F", -1);
         state.printNodes();
+        /*state.rotate("F", 1);*/
+        //System.out.println(state.getCube().get("111").getNode3D().getFace("L"));
+        //state.rotate("F", 1);
+        //System.out.println(state.getCube().get("111").getNode3D().getFace("L"));
+        //state.rotate("F", 1);
+        //System.out.println(state.getCube().get("111").getNode3D().getFace("L"));
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);
@@ -57,25 +63,25 @@ public class Rubix implements Runnable{
                 renderer.toggleGridVisible();
             }
         } else {
-            if (KeyInput.wasReleased(VK_F))
+            if (KeyInput.wasPressed(VK_F))
                 arg = "F";
-            else if (KeyInput.wasReleased(VK_B))
+            else if (KeyInput.wasPressed(VK_B))
                 arg = "B";
-            else if (KeyInput.wasReleased(VK_U))
+            else if (KeyInput.wasPressed(VK_U))
                 arg = "U";
-            else if (KeyInput.wasReleased(VK_D))
+            else if (KeyInput.wasPressed(VK_D))
                 arg = "D";
-            else if (KeyInput.wasReleased(VK_L))
+            else if (KeyInput.wasPressed(VK_L))
                 arg = "L";
-            else if (KeyInput.wasReleased(VK_R))
+            else if (KeyInput.wasPressed(VK_R))
                 arg = "R";
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {
                 if (arg.charAt(1) == '\'')
-                    state.rotate(arg, -1);
-            }
-            state.rotate(arg, 1);
+                    state.rotate(arg.charAt(0) + "", -1);
+            } else
+                state.rotate(arg.charAt(0) + "", 1);
         }
     }
 

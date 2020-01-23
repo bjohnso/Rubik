@@ -49,16 +49,4 @@ public class Solver {
         else
             return face + "'";
     }
-
-    public int nodeCompareColor(Node a, Color color) {
-        if (a.getColor() == color)
-            return 0;
-        return -1;
-    }
-
-    public int nodeComparePrecise(Node a, Color color, String type) {
-        if (a.getColor() == color && a.getType().equalsIgnoreCase(type))
-            return 0;
-        return -1;
-    }
 }

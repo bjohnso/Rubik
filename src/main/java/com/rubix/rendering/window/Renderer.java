@@ -55,7 +55,8 @@ public class Renderer extends Canvas {
         if (gridVisible)
             drawFrame(graphics);
         drawCube(graphics);
-        renderPlanes(graphics, state);
+        if (state.getCube() != null)
+            renderPlanes(graphics, state);
         graphics.dispose();
         bufferStrategy.show();
     }
