@@ -56,7 +56,6 @@ public class Renderer extends Canvas {
             drawFrame(graphics);
         drawCube(graphics);
         renderPlanes(graphics, state);
-        renderTelemetry(graphics, state);
         graphics.dispose();
         bufferStrategy.show();
     }
@@ -160,7 +159,7 @@ public class Renderer extends Canvas {
         }
     }
 
-    public void renderTelemetry(Graphics graphics, State state) {
+    /*public void renderTelemetry(Graphics graphics, State state) {
         Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.RED,
                 "SCRAMBLE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 20));
         int newLine = 0;
@@ -188,27 +187,28 @@ public class Renderer extends Canvas {
                     state.getSolve().charAt(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
                     (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * newLine));
         }
-    }
+    }*/
 
     public void renderPlanes(Graphics graphics, State state) {
         int plane_width = cubePoints.get("center_depth").getX() - cubePoints.get("left_depth").getX();
         int plane_height = cubePoints.get("left_depth").getY() - cubePoints.get("left_height").getY();
         int node_width = plane_width / 3;
         int node_height = plane_height / 3;
+
         //FRONT
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("F").getNodes()[i][0].getColor());
+                graphics.setColor(state.getCube().get((i + 1) + "11").getNode3D().getFace("F"));
                 graphics.drawLine(cubePoints.get("left_depth").getX(), (cubePoints.get("left_depth").getY() - j) - (node_height * i),
                         cubePoints.get("left_depth").getX() + (node_width), (cubePoints.get("left_depth").getY() + ((node_height / 2) - j)) - (node_height * i));
             }
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("F").getNodes()[i][1].getColor());
+                graphics.setColor(state.getCube().get((i + 1) + "12").getNode3D().getFace("F"));
                 graphics.drawLine(cubePoints.get("left_depth").getX() + (node_width), (cubePoints.get("left_depth").getY() + ((node_height / 2) - j)) - (node_height * i),
                         cubePoints.get("left_depth").getX() + (node_width * 2), (cubePoints.get("left_depth").getY() + (node_height - j)) - (node_height * i));
             }
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("F").getNodes()[i][2].getColor());
+                graphics.setColor(state.getCube().get((i + 1) + "13").getNode3D().getFace("F"));
                 graphics.drawLine((cubePoints.get("left_depth").getX() + (node_width * 2)), (cubePoints.get("left_depth").getY() + ((node_height - j))) - (node_height * i),
                         cubePoints.get("left_depth").getX() + (node_width * 3), cubePoints.get("left_depth").getY() + ((node_height / 2 * 3) - j) - (node_height * i));
             }
@@ -216,17 +216,17 @@ public class Renderer extends Canvas {
         //RIGHT
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("R").getNodes()[i][0].getColor());
+                graphics.setColor(state.getCube().get((i + 1) + "13").getNode3D().getFace("R"));
                 graphics.drawLine(cubePoints.get("center_depth").getX(), (cubePoints.get("center_depth").getY() - j) - (node_height * i),
                         cubePoints.get("center_depth").getX() + (node_width), (cubePoints.get("center_depth").getY() - ((node_height / 2) + j)) - (node_height * i));
             }
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("R").getNodes()[i][1].getColor());
+                graphics.setColor(state.getCube().get((i + 1) + "23").getNode3D().getFace("R"));
                 graphics.drawLine((cubePoints.get("center_depth").getX() + (node_width)), (cubePoints.get("center_depth").getY() - ((node_height / 2) + j)) - (node_height * i),
                         cubePoints.get("center_depth").getX() + (node_width * 2), (cubePoints.get("center_depth").getY() - ((node_height) + j)) - (node_height * i));
             }
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("R").getNodes()[i][2].getColor());
+                graphics.setColor(state.getCube().get((i + 1) + "33").getNode3D().getFace("R"));
                 graphics.drawLine((cubePoints.get("center_depth").getX() + (node_width * 2)), (cubePoints.get("center_depth").getY() - ((node_height) + j)) - (node_height * i),
                         cubePoints.get("center_depth").getX() + (node_width * 3), (cubePoints.get("center_depth").getY() - ((node_height / 2 * 3) + j)) - (node_height * i));
             }
@@ -234,17 +234,17 @@ public class Renderer extends Canvas {
         //UP
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("U").getNodes()[i][0].getColor());
+                graphics.setColor(state.getCube().get("3" + (i + 1) + "1").getNode3D().getFace("U"));
                 graphics.drawLine(cubePoints.get("left_height").getX() + (j) + (i * node_width) , (cubePoints.get("left_height").getY()) + (j / 8 * 5) - ((i * (node_height) / 2)),
                         cubePoints.get("left_height").getX() + (node_width) + (j) + (i * node_width), cubePoints.get("left_height").getY() - ((node_height / 2)) + (j / 8 * 5) - ((i * (node_height)) / 2));
             }
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("U").getNodes()[i][1].getColor());
+                graphics.setColor(state.getCube().get("3" + (i + 1) + "2").getNode3D().getFace("U"));
                 graphics.drawLine(cubePoints.get("left_height").getX() + (node_width) + (j) + (i * node_width), cubePoints.get("left_height").getY() + (node_height / 2) + (j / 8 * 5) - ((i * (node_height) / 2)),
                         cubePoints.get("left_height").getX() + (node_width * 2) + (j) + (i * node_width), cubePoints.get("left_height").getY() + (j / 8 * 5) - ((i * (node_height) / 2)));
             }
             for (int j = 0; j < node_width; j++) {
-                graphics.setColor(state.getPlaneMap().get("U").getNodes()[i][2].getColor());
+                graphics.setColor(state.getCube().get("3" + (i + 1) + "3").getNode3D().getFace("U"));
                 graphics.drawLine(cubePoints.get("left_height").getX() + (node_width * 2) + (j) + (i * node_width), cubePoints.get("left_height").getY() + (node_height) + (j / 8 * 5) - ((i * (node_height) / 2)),
                         cubePoints.get("left_height").getX() + (node_width * 3) + (j) + (i * node_width), cubePoints.get("left_height").getY() + (node_height / 2) + (j / 8 * 5) - ((i * (node_height) / 2)));
             }

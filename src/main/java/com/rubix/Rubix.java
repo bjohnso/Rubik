@@ -26,41 +26,18 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
+        state.rotate("F", 1);
+        state.printNodes();
         this.renderer = new Renderer(this);
-        this.solver = new Solver();
-
-        /*state.permutate("F");
-        state.permutate("U");
-        state.permutate("B");
-        state.permutate("B");
-        state.permutate("F");
-        state.permutate("L");
-        state.permutate("F");
-        state.permutate("D");
-        state.permutate("F");
-        state.permutate("R");
-        state.permutate("F");
-        state.permutate("R");
-        state.permutate("D");
-        state.permutate("L");
-        state.permutate("D");
-        state.permutate("R");
-        state.permutate("L'");
-        state.permutate("B");*/
-
-        /*state = solver.solveWhiteCross(state);
-        state.permutate("F");
-        state.permutate("R");
-        state = solver.solveWhiteCross(state);*/
+        KeyInput keyInput = new KeyInput();
+        renderer.addKeyListener(keyInput);
+        renderer.getFrame().addKeyListener(keyInput);
         start();
     }
 
     private void tick() {
         //Input Listeners
         String arg = "";
-        KeyInput keyInput = new KeyInput();
-        renderer.addKeyListener(keyInput);
-        renderer.getFrame().addKeyListener(keyInput);
 
         if (KeyInput.isDown(VK_SHIFT)) {
             if (KeyInput.wasPressed(VK_F))
@@ -80,28 +57,25 @@ public class Rubix implements Runnable{
                 renderer.toggleGridVisible();
             }
         } else {
-            if (KeyInput.wasPressed(VK_F))
+            if (KeyInput.wasReleased(VK_F))
                 arg = "F";
-            else if (KeyInput.wasPressed(VK_B))
+            else if (KeyInput.wasReleased(VK_B))
                 arg = "B";
-            else if (KeyInput.wasPressed(VK_U))
+            else if (KeyInput.wasReleased(VK_U))
                 arg = "U";
-            else if (KeyInput.wasPressed(VK_D))
+            else if (KeyInput.wasReleased(VK_D))
                 arg = "D";
-            else if (KeyInput.wasPressed(VK_L))
+            else if (KeyInput.wasReleased(VK_L))
                 arg = "L";
-            else if (KeyInput.wasPressed(VK_R))
+            else if (KeyInput.wasReleased(VK_R))
                 arg = "R";
-            else if (KeyInput.wasReleased(VK_1)){
-                state = solver.solveDaisy(state);
-            }
-            else if (KeyInput.wasReleased(VK_2)){
-                state = solver.solveCross(state);
-            }
         }
         if (!arg.equals("")){
-            state.permutate(arg);
-            state.scrambleAdd(arg);
+            if (arg.length() > 1) {
+                if (arg.charAt(1) == '\'')
+                    state.rotate(arg, -1);
+            }
+            state.rotate(arg, 1);
         }
     }
 
@@ -162,7 +136,6 @@ public class Rubix implements Runnable{
         if (running)
             return;
         running = true;
-        KeyInput.createTimer();
         new Thread(this, "RubixMain-Thread").start();
     }
 

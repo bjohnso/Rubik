@@ -6,12 +6,35 @@ public class Node {
 
     private String id;
     private Color color;
+    private String parentAlias;
+    private String currentPlaneAlias;
     private String type;
 
     public Node(String id, Color color, String type) {
         this.id = id;
         this.color = color;
         this.type = type;
+    }
+
+    public void setParentAlias(String parentAlias) {
+        this.parentAlias = parentAlias;
+    }
+
+    public String getParentAlias() {
+        return parentAlias;
+    }
+
+
+    public void setCurrentPlaneAlias(String currentPlaneAlias) {
+        this.currentPlaneAlias = currentPlaneAlias;
+    }
+
+    public String getCurrentPlaneAlias() {
+        return currentPlaneAlias;
+    }
+
+    public boolean isSolved(){
+        return currentPlaneAlias == parentAlias ? true : false;
     }
 
     public String getType() { return type; }

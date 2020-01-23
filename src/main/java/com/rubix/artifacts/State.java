@@ -1,252 +1,143 @@
 package com.rubix.artifacts;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import static com.rubix.runes.Runes.*;
 
 public class State {
 
     private String rules[];
     private String scramble;
     private String solve;
-    private HashMap<String, Plane> planeMap = new HashMap<String, Plane>();
+    private HashMap<String, Cubicle> cube = new HashMap<>();
+    private HashMap<String, String[]> cubicleRotations = new HashMap<>();
+    private HashMap<String, String[]> faceRotations = new HashMap<>();
 
     public State() {
-        scramble = "";
-        solve = "";
-        initPlaneMap();
-        initRules();
+        initCubicleRotations();
+        initCube();
     }
 
-    private void initRules() {
-        String temp[] = {
-            "FURDL",
-            "BDRUL",
-            "UFLBR",
-            "DFRBL",
-            "LFDBU",
-            "RFUBD"
-        };
-        rules = temp;
+    private void initCubicleRotations() {
+        cubicleRotations.put("F", ROTATION_NODES_F);
+        cubicleRotations.put("B", ROTATION_NODES_B);
+        cubicleRotations.put("U", ROTATION_NODES_U);
+        cubicleRotations.put("D", ROTATION_NODES_D);
+        cubicleRotations.put("L", ROTATION_NODES_L);
+        cubicleRotations.put("R", ROTATION_NODES_R);
     }
 
-    private void initPlaneMap() {
-        planeMap.put("F", new Plane("F", Color.RED, "B"));
-        planeMap.put("R", new Plane("R", Color.GREEN, "L"));
-        planeMap.put("B", new Plane("B", Color.MAGENTA, "F"));
-        planeMap.put("L", new Plane("L", Color.BLUE, "R"));
-        planeMap.put("U", new Plane("U", Color.YELLOW, "D"));
-        planeMap.put("D", new Plane("D", Color.WHITE, "U"));
+    private void initFaceRotations() {
+        faceRotations.put("F", ROTATION_FACES_F);
+        faceRotations.put("B", ROTATION_FACES_B);
+        faceRotations.put("U", ROTATION_FACES_U);
+        faceRotations.put("D", ROTATION_FACES_D);
+        faceRotations.put("L", ROTATION_FACES_L);
+        faceRotations.put("R", ROTATION_FACES_R);
     }
 
-    public Node[][] cloneRotation(String rotation) {
-        String rule = getRule(rotation.charAt(0));
-        Node stems[][] = new Node[4][3];
-        if (rotation.length() == 1 || (rotation.length() > 1 && rotation.charAt(1) == '2')) {
-            if (rotation.charAt(0) == 'F') {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 0);
-                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 1);
-            } else if (rotation.charAt(0) == 'B') {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
-                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-            } else if (rotation.charAt(0) == 'U') {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
-                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 0);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
-                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 0);
-            } else if (rotation.charAt(0) == 'D') {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 2, 0);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 0, 0);
-            } else if (rotation.charAt(0) == 'L') {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 1);
-                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 1);
-                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-            } else if (rotation.charAt(0) == 'R') {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 2, 1);
-                stems[1] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 1);
-                stems[3] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 1);
+    private void initCube() {
+        //LAYER 1
+        cube.put("111", new Cubicle("111"));
+        cube.put("112", new Cubicle("112"));
+        cube.put("113", new Cubicle("113"));
+        cube.put("121", new Cubicle("121"));
+        cube.put("122", new Cubicle("122"));
+        cube.put("123", new Cubicle("123"));
+        cube.put("131", new Cubicle("131"));
+        cube.put("132", new Cubicle("132"));
+        cube.put("133", new Cubicle("133"));
+
+        //LAYER 2
+        cube.put("211", new Cubicle("211"));
+        cube.put("212", new Cubicle("212"));
+        cube.put("213", new Cubicle("213"));
+        cube.put("221", new Cubicle("221"));
+        cube.put("222", new Cubicle("222"));
+        cube.put("223", new Cubicle("223"));
+        cube.put("231", new Cubicle("231"));
+        cube.put("232", new Cubicle("232"));
+        cube.put("233", new Cubicle("233"));
+
+        //LAYER 3
+        cube.put("311", new Cubicle("311"));
+        cube.put("312", new Cubicle("312"));
+        cube.put("313", new Cubicle("313"));
+        cube.put("321", new Cubicle("321"));
+        cube.put("322", new Cubicle("322"));
+        cube.put("323", new Cubicle("323"));
+        cube.put("331", new Cubicle("331"));
+        cube.put("332", new Cubicle("332"));
+        cube.put("333", new Cubicle("333"));
+    }
+
+    public void rotate(String rotation, int direction) {
+        System.out.println(rotation);
+        String rule[] = cubicleRotations.get(rotation);
+        Node3D clone1;
+        Node3D clone2;
+        if (direction > 0){
+            clone1 = cube.get(rule[0]).getNode3D();
+            clone2 = cube.get(rule[1]).getNode3D();
+            for (int i = 0; i < rule.length; i++){
+                if (i == 0)
+                    cube.get(rule[i]).setNode3D(cube.get(rule[rule.length - 2]).getNode3D());
+                else if (i == 1)
+                    cube.get(rule[i]).setNode3D(cube.get(rule[rule.length - 1]).getNode3D());
+                else if (i == 2)
+                    cube.get(rule[i]).setNode3D(clone1);
+                else if (i == 3)
+                    cube.get(rule[i]).setNode3D(clone2);
+                else
+                    cube.get(rule[i]).setNode3D(cube.get(rule[i - 2]).getNode3D());
             }
-        } else if (rotation.length() > 1 && rotation.charAt(1) == '\''){
-            if (rotation.equalsIgnoreCase("F'")) {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 2, 0);
-                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("B'")) {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 0, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 0);
-                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 2, 1);
-            } else if (rotation.equalsIgnoreCase("U'")) {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 0);
-                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 0);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(0, 2, 0);
-                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 0);
-            } else if (rotation.equalsIgnoreCase("D'")) {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(0, 0, 0);
-                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(0, 2, 0);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 0);
-                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(0, 0, 0);
-            } else if (rotation.equalsIgnoreCase("L'")) {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 0, 1);
-                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 0, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 0, 1);
-                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("R'")) {
-                stems[0] = planeMap.get(rule.charAt(1) + "").cloneStem(2, 2, 1);
-                stems[1] = planeMap.get(rule.charAt(4) + "").cloneStem(2, 2, 1);
-                stems[2] = planeMap.get(rule.charAt(3) + "").cloneStem(2, 2, 1);
-                stems[3] = planeMap.get(rule.charAt(2) + "").cloneStem(2, 2, 1);
+        } /*else {
+            for (int i = rule.length - 1; i >= 0; i--) {
+                if (i == rule.length - 1)
+                    cube.get(rule[i]).setNode3D(clone.get(rule[1]).getNode3D());
+                else if (i == rule.length - 2)
+                    cube.get(rule[i]).setNode3D(clone.get(rule[0]).getNode3D());
+                else
+                    cube.get(rule[i]).setNode3D(clone.get(rule[i + 2]).getNode3D());
             }
-        }
-        return stems;
+        }*/
+        //updateNodes(rotation, direction);
     }
 
-    public void insertRotation(String rotation, Node[][] stems) {
-        String rule = getRule(rotation.charAt(0));
-        if (rotation.length() == 1 || (rotation.length() > 1 && rotation.charAt(1) == '2')) {
-            if (rotation.charAt(0) == 'F') {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
-            } else if (rotation.charAt(0) == 'B') {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
-            } else if (rotation.charAt(0) == 'U') {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 0);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 0);
-            } else if (rotation.charAt(0) == 'D') {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 0, 0, 0);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 0, 0, 0);
-            } else if (rotation.charAt(0) == 'L') {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 1);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 0, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 1);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 0, 1);
-            } else if (rotation.charAt(0) == 'R') {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 2, 1);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[0], 2, 2, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 1);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[2], 2, 2, 1);
-            }
-        } else if (rotation.length() > 1 && rotation.charAt(1) == '\''){
-            if (rotation.equalsIgnoreCase("F'")) {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 2, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("B'")) {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 2, 1);
-            } else if (rotation.equalsIgnoreCase("U'")) {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 0);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 0, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 0);
-            } else if (rotation.equalsIgnoreCase("D'")) {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 0, 0, 0);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 0, 0, 0);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 0);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 0, 0, 0);
-            } else if (rotation.equalsIgnoreCase("L'")) {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 0, 1);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 0, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 0, 1);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 0, 1);
-            } else if (rotation.equalsIgnoreCase("R'")) {
-                planeMap.get(rule.charAt(1) + "").insertStem(stems[3], 2, 2, 1);
-                planeMap.get(rule.charAt(4) + "").insertStem(stems[0], 2, 2, 1);
-                planeMap.get(rule.charAt(3) + "").insertStem(stems[1], 2, 2, 1);
-                planeMap.get(rule.charAt(2) + "").insertStem(stems[2], 2, 2, 1);
-            }
-        }
+    public void updateNodes(String rotation, int direction) {
+        HashMap<String, Cubicle> clone = cube;
+        String rule[] = cubicleRotations.get(rotation);
+        String rotate;
+        if (direction > 0)
+            rotate = rotation;
+        else
+            rotate = getMirror(rotation);
+
+        for (String c : rule)
+            cube.get(c).getNode3D().rotateFaces(rotate);
     }
 
-    public void permutate(String permutation) {
-        System.out.println("NEW ROTATION : " + permutation);
-        Iterator<Map.Entry<String, Plane>> it = planeMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, Plane> pair = it.next();
-            for (int i = 0; i < rules.length; i++) {
-                if (permutation.charAt(0) == rules[i].charAt(0)) {
-                    if (permutation.length() > 1 && permutation.charAt(1) == '\'')
-                        planeMap.get(permutation.charAt(0) + "").rotatePlane(-1);
-                    else
-                        planeMap.get(permutation.charAt(0) + "").rotatePlane(1);
+    public HashMap<String, Cubicle> cloneCube() {
+        HashMap<String, Cubicle> clone = new HashMap<>();
+         Iterator<Map.Entry<String, Cubicle>> it = cube.entrySet().iterator();
 
-                    insertRotation(permutation, cloneRotation(permutation));
-
-                    if (permutation.length() > 1 && permutation.charAt(1) == '2') {
-                        planeMap.get(permutation.charAt(0) + "").rotatePlane(1);
-                        insertRotation(permutation, cloneRotation(permutation));
-                    }
-                    break ;
-                }
-            }
-            break ;
-        }
-    }
-
-    public String getRule(char rotation){
-        String rule = "";
-
-        for (int i = 0; i < rules.length; i++){
-            if (rotation == rules[i].charAt(0)) {
-                rule += rules[i];
-                break ;
-            }
-        }
-        return rule;
-    }
-
-    public String[] getRules() {
-        return rules;
-    }
-
-    public void scrambleAdd(String rotation) {
-        scramble += rotation;
-    }
-
-    public void solveAdd(String solve) {
-        this.solve += solve;
-    }
-
-    public String getScramble() {
-        return scramble;
-    }
-
-    public String getSolve() {
-        return solve;
-    }
-
-    public void printState() {
-        Iterator<Map.Entry<String, Plane>> it = planeMap.entrySet().iterator();
         while (it.hasNext()){
-            Map.Entry<String, Plane> pair = it.next();
-            pair.getValue().printPlane();
-            System.out.println("\n");
+            Map.Entry<String, Cubicle> pair = it.next();
+            clone.put(pair.get)
         }
     }
 
-    public HashMap<String, Plane> getPlaneMap() {
-        return planeMap;
+    public void printNodes() {
+        System.out.println(cube.get("111").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("211").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("311").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("312").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("313").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("213").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("113").getNode3D().getCurrentCubicle());
+        System.out.println(cube.get("112").getNode3D().getCurrentCubicle());
     }
 }

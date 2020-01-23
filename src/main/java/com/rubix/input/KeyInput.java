@@ -13,8 +13,6 @@ public class KeyInput extends KeyAdapter {
     private static final boolean lastKeys[] = new boolean[NUM_KEYS];
     private static boolean timer = false;
 
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-
     public static void createTimer() {
         Timer delayTimer = new Timer();
         delayTimer.scheduleAtFixedRate(new TimerTask() {
@@ -27,12 +25,7 @@ public class KeyInput extends KeyAdapter {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        /*if (!timer) {
-            if (!keys[e.getKeyCode()]) {*/
-                keys[e.getKeyCode()] = true;
-                /*timer = true;*/
-      /*      }
-        }*/
+        keys[e.getKeyCode()] = true;
     }
 
     @Override

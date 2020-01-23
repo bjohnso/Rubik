@@ -8,9 +8,10 @@ public class Plane {
     private String alias;
     private Color color;
     private String polar;
+    private String rule;
     private Node nodes[][];
 
-    public Plane(String alias, Color color, String polar){
+    public Plane(String alias, Color color, String rule, String polar){
         setAlias(alias);
         setColor(color);
         setPolar(polar);
@@ -23,6 +24,12 @@ public class Plane {
                 {new Node("ML", this.getColor(), "EDGE"), new Node("MM", this.getColor(), "MIDDLE"), new Node("MR", this.getColor(), "EDGE")},
                 {new Node("UL", this.getColor(), "CORNER"), new Node("UM", this.getColor(), "EDGE"), new Node("UR", this.getColor(),"CORNER")}
         };
+
+        for (Node[] nodes : temp){
+            for (Node n : nodes){
+                n.setParentAlias(alias);
+            }
+        }
         nodes = temp;
     }
 
@@ -104,6 +111,18 @@ public class Plane {
         }
     }
 
+    public void updateNodes(){
+        for (Node nodes[] : nodes){
+            for (Node n : nodes){
+                n.setCurrentPlaneAlias(alias);
+            }
+        }
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
+    }
+
     public void setPolar(String polar) {
         this.polar = polar;
     }
@@ -126,6 +145,10 @@ public class Plane {
 
     public Color getColor() {
         return color;
+    }
+
+    public String getRule() {
+        return rule;
     }
 
     public Node[][] getNodes() {
