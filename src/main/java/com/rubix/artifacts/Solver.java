@@ -51,7 +51,7 @@ public class Solver {
         };
 
         State cubeStateClone = new State();
-        //cubeStateClone.setCube(state.cloneCube());
+        cubeStateClone.setCube(state.cloneCube());
         ArrayList<String> finalPermutations = new ArrayList<>();
         int backtrack = 0;
 

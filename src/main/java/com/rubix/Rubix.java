@@ -28,9 +28,13 @@ public class Rubix implements Runnable{
         //Initialise Window
         state = new State();
         Solver solver = new Solver();
-        solver.solveDaisy(state);
-        /*for (String s : steps)
-            System.out.println("STEP : " + s);*/
+        ArrayList<String> solve = solver.solveDaisy(state);
+        for (String s : solve) {
+            if (s.length() > 1 && s.charAt(1) == '\'')
+                state.rotate(s.charAt(0) + "", -1);
+            else
+                state.rotate(s, 1);
+        }
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);

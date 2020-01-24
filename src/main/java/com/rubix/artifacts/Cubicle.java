@@ -57,7 +57,7 @@ public class Cubicle {
 
     public Cubicle clone() {
         Cubicle clone = new Cubicle(position, this.type);
-        clone.setNode3D(node3D);
+        clone.setNode3D(node3D.cloneNode3D());
         return clone;
     }
 }

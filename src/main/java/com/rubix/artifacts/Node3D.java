@@ -111,7 +111,12 @@ public class Node3D {
         Node3D node3D = new Node3D(this.homeCubicle, this.type);
         node3D.setCurrentCubicle(this.currentCubicle);
         HashMap<String, Color> hashMapClone = new HashMap<>();
-        node3D.setFaceMap();
+        Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry<String, Color> pair = it.next();
+            hashMapClone.put(pair.getKey(), pair.getValue());
+        }
+        node3D.setFaceMap(hashMapClone);
         return node3D;
     }
 
