@@ -5,15 +5,16 @@ import java.awt.*;
 public class Cubicle {
     private Node3D node3D;
     private String position;
+    private String type;
 
-    public Cubicle(String position, boolean init) {
+    public Cubicle(String position, String type) {
         this.position = position;
-        if (init)
-            initNode();
+        this.type = type;
+        initNode();
     }
 
     private void initNode() {
-        this.node3D = new Node3D(this.position);
+        this.node3D = new Node3D(this.position, this.type);
         if (position.charAt(1) == '1')
             node3D.addFace("F", Color.RED);
         if (position.charAt(1) == '3')
@@ -37,6 +38,14 @@ public class Cubicle {
         return position;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public void setNode3D(Node3D node3D) {
         this.node3D = node3D;
         this.node3D.setCurrentCubicle(position);
@@ -47,7 +56,7 @@ public class Cubicle {
     }
 
     public Cubicle clone() {
-        Cubicle clone = new Cubicle(position, false);
+        Cubicle clone = new Cubicle(position, this.type);
         clone.setNode3D(node3D);
         return clone;
     }

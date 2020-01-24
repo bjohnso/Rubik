@@ -1,6 +1,7 @@
 package com.rubix.artifacts;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,10 +13,12 @@ public class Node3D {
 
     private String currentCubicle;
     private String homeCubicle;
+    private String type;
     private HashMap<String, Color> faceMap = new HashMap<>();
 
-    public Node3D(String homeCubicle) {
+    public Node3D(String homeCubicle, String type) {
         this.homeCubicle = homeCubicle;
+        this.type = type;
     }
 
     public void rotateFaces(String rotate) {
@@ -94,6 +97,16 @@ public class Node3D {
         }
     }
 
+    public String getColor(Color color) {
+        Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry<String, Color> pair = it.next();
+            if (pair.getValue() == color)
+                return pair.getKey();
+        }
+        return null;
+    }
+
     public Color getFace(String face){
         return faceMap.get(face);
     }
@@ -108,6 +121,18 @@ public class Node3D {
 
     public void setCurrentCubicle(String currentCubicle) {
         this.currentCubicle = currentCubicle;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public HashMap<String, Color> getFaceMap() {
+        return faceMap;
     }
 
     public void setHomeCubicle(String homeCubicle) {

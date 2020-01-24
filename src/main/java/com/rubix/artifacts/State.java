@@ -41,37 +41,37 @@ public class State {
 
     private void initCube() {
         //LAYER 1
-        cube.put("111", new Cubicle("111", true));
-        cube.put("112", new Cubicle("112", true));
-        cube.put("113", new Cubicle("113", true));
-        cube.put("121", new Cubicle("121", true));
-        cube.put("122", new Cubicle("122", true));
-        cube.put("123", new Cubicle("123", true));
-        cube.put("131", new Cubicle("131", true));
-        cube.put("132", new Cubicle("132", true));
-        cube.put("133", new Cubicle("133", true));
+        cube.put("111", new Cubicle("111", "C"));
+        cube.put("112", new Cubicle("112", "E"));
+        cube.put("113", new Cubicle("113", "C"));
+        cube.put("121", new Cubicle("121", "E"));
+        cube.put("122", new Cubicle("122", "M"));
+        cube.put("123", new Cubicle("123", "E"));
+        cube.put("131", new Cubicle("131", "C"));
+        cube.put("132", new Cubicle("132", "E"));
+        cube.put("133", new Cubicle("133", "C"));
 
         //LAYER 2
-        cube.put("211", new Cubicle("211", true));
-        cube.put("212", new Cubicle("212", true));
-        cube.put("213", new Cubicle("213", true));
-        cube.put("221", new Cubicle("221", true));
-        cube.put("222", new Cubicle("222", true));
-        cube.put("223", new Cubicle("223", true));
-        cube.put("231", new Cubicle("231", true));
-        cube.put("232", new Cubicle("232", true));
-        cube.put("233", new Cubicle("233", true));
+        cube.put("211", new Cubicle("211", "E"));
+        cube.put("212", new Cubicle("212", "M"));
+        cube.put("213", new Cubicle("213", "E"));
+        cube.put("221", new Cubicle("221", "M"));
+        cube.put("222", new Cubicle("222", "M"));
+        cube.put("223", new Cubicle("223", "M"));
+        cube.put("231", new Cubicle("231", "E"));
+        cube.put("232", new Cubicle("232", "M"));
+        cube.put("233", new Cubicle("233", "E"));
 
         //LAYER 3
-        cube.put("311", new Cubicle("311", true));
-        cube.put("312", new Cubicle("312", true));
-        cube.put("313", new Cubicle("313", true));
-        cube.put("321", new Cubicle("321", true));
-        cube.put("322", new Cubicle("322", true));
-        cube.put("323", new Cubicle("323", true));
-        cube.put("331", new Cubicle("331", true));
-        cube.put("332", new Cubicle("332", true));
-        cube.put("333", new Cubicle("333", true));
+        cube.put("311", new Cubicle("311", "C"));
+        cube.put("312", new Cubicle("312", "E"));
+        cube.put("313", new Cubicle("313", "C"));
+        cube.put("321", new Cubicle("321", "E"));
+        cube.put("322", new Cubicle("322", "M"));
+        cube.put("323", new Cubicle("323", "E"));
+        cube.put("331", new Cubicle("331", "C"));
+        cube.put("332", new Cubicle("332", "E"));
+        cube.put("333", new Cubicle("333", "C"));
     }
 
     public void rotate(String rotation, int direction) {

@@ -2,7 +2,7 @@ package com.rubix.runes;
 
 public class Runes {
 
-    //NODES AFFECTED BY ROTATIONS
+    //ORDER OF NODE ROTATIONS
     public static final String ROTATION_NODES_F[] = {
             "111",
             "211",
@@ -64,7 +64,7 @@ public class Runes {
             "123"
     };
 
-    //FACES AFFECTED BY ROTATIONS
+    //ORDER OF FACE ROTATIONS ON NODES
     public static final String ROTATION_FACES_F[] = {
             "U",
             "R",
@@ -106,6 +106,79 @@ public class Runes {
             "D",
             "F",
             "U"
+    };
+
+    //COLLECTION OF PLANES
+    public static final String PLANE_F[] = {
+            "111",
+            "112",
+            "113",
+            "211",
+            "212",
+            "213",
+            "311",
+            "312",
+            "313",
+    };
+
+    public static final String PLANE_B[] = {
+            "131",
+            "132",
+            "133",
+            "231",
+            "232",
+            "233",
+            "331",
+            "332",
+            "333",
+    };
+
+    public static final String PLANE_U[] = {
+            "311",
+            "312",
+            "313",
+            "321",
+            "322",
+            "323",
+            "331",
+            "332",
+            "333",
+    };
+
+    public static final String PLANE_D[] = {
+            "111",
+            "112",
+            "113",
+            "121",
+            "122",
+            "123",
+            "131",
+            "132",
+            "133",
+    };
+
+    public static final String PLANE_L[] = {
+            "131",
+            "121",
+            "111",
+            "231",
+            "221",
+            "211",
+            "331",
+            "321",
+            "311",
+    };
+
+    public static final String PLANE_R[] = {
+            "113",
+            "122",
+            "133",
+            "213",
+            "223",
+            "233",
+            "313",
+            "323",
+            "333",
     };
 
     public static String getMirror(String rotate) {
