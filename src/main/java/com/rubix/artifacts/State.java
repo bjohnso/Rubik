@@ -153,11 +153,33 @@ public class State {
         this.scramble = scramble;
     }
 
+    public void setCube(HashMap<String, Cubicle> cube) {
+        this.cube = cube;
+    }
+
+    public void setCubicleRotations(HashMap<String, String[]> cubicleRotations) {
+        this.cubicleRotations = cubicleRotations;
+    }
+
+    public void setFaceRotations(HashMap<String, String[]> faceRotations) {
+        this.faceRotations = faceRotations;
+    }
+
+    public void setRules(String[] rules) {
+        this.rules = rules;
+    }
+
     public void addScramble(String scramble) {
         this.scramble.add(scramble);
     }
 
     public void setSolve(String solve) {
         this.solve = solve;
+    }
+
+    public State cloneState() {
+        State state = new State();
+        state.setCube(this.cloneCube());
+        return state;
     }
 }
