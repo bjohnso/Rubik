@@ -171,7 +171,7 @@ public class Runes {
 
     public static final String PLANE_R[] = {
             "113",
-            "122",
+            "123",
             "133",
             "213",
             "223",

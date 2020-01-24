@@ -5,6 +5,7 @@ import com.rubix.artifacts.State;
 import com.rubix.input.KeyInput;
 import com.rubix.rendering.window.Renderer;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,6 +27,10 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
+        Solver solver = new Solver();
+        solver.solveDaisy(state);
+        /*for (String s : steps)
+            System.out.println("STEP : " + s);*/
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);

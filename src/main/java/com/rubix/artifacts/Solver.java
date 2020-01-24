@@ -42,55 +42,60 @@ public class Solver {
     }
 
     public ArrayList<String> solveDaisy(State state) {
-        State cubeStateClone = state.cloneState();
-        ArrayList<String> finalPermutations = new ArrayList<>();
-        ArrayList<String> tempPermutations = new ArrayList<>();
-        int backtrack = 0;
-        int solveCount = 0;
 
-        while (solveCount < 4) {
+        String edges[] = {
+                "312",
+                "321",
+                "332",
+                "323"
+        };
+
+        State cubeStateClone = new State();
+        //cubeStateClone.setCube(state.cloneCube());
+        ArrayList<String> finalPermutations = new ArrayList<>();
+        int backtrack = 0;
+
             //INSPECT TOP PLANE
-            for (int i = 0; i < PLANE_U.length - 1; i++) {
-                Cubicle target = state.getCube().get(PLANE_U[i]);
+            for (int i = 0; i < edges.length; i++) {
+                ArrayList<String> tempPermutations = new ArrayList<>();
+                Cubicle target = cubeStateClone.getCube().get(edges[i]);
                 Cubicle source = null;
+
+                System.out.println("TARGET : " + target.getPosition());
 
                 //DETERMINE IF NODES OF TYPE EDGE HAVE A WHITE FACE DISPLAYED ON THE TOP PLANE
                 if (target.getType().equalsIgnoreCase("E")) {
                     if (target.getNode3D().getFace("U") != Color.WHITE) {
-                        //IF NOT SEARCH FOR A NODE OF TYPE EDGE WITH A WHITE FACE IN EACH SUCCESSIVE PLANE THAT INTERSECTS WITH TOP
-                        for (int j = 0; j < ROTATION_FACES_U.length - 1; j++) {
-                            if ((source = findNode(cubeStateClone, planeMap.get(ROTATION_FACES_U[i]), "E", Color.WHITE)) != null)
-                                break;
+                        //IF NOT SEARCH FOR A NODE OF TYPE EDGE WITH A WHITE FACE IN EACH SUCCESSIVE PLANE THAT INTERSECTS TOP
+                        if ((source = findNode(cubeStateClone, planeMap.get(ROTATION_FACES_U[i]), "E", Color.WHITE)) != null) {
+                            System.out.println("SOLUTION FOUND IN PLANE : " + ROTATION_FACES_U[i] + " at node : " + source.getPosition());
+                            //DETERMINE SET OF PERMUTATIONS TO SOLVE FOR THE DESIRED STATE
+                            if (source.getNode3D().getFace(ROTATION_FACES_U[i]) != Color.WHITE) {
+                                tempPermutations = computePermutations(cubeStateClone, source, target, "NONE");
+                            }
+                            else
+                                tempPermutations = computePermutations(cubeStateClone, source, target, ROTATION_FACES_U[i]);
+                            i -= backtrack;
+                            while (backtrack > 0) {
+                                tempPermutations.add("U'");
+                                backtrack--;
+                            }
                         }
-                    }
-                    //DETERMINE SET OF PERMUTATIONS TO SOLVE FOR THE DESIRED STATE
-                    if (source != null) {
-                        if (source.getNode3D().getFace("F") != Color.WHITE)
-                            tempPermutations = computePermutations(cubeStateClone, source, target, "NONE");
-                        else
-                            tempPermutations = computePermutations(cubeStateClone, source, target, "F");
-                        solveCount++;
-                        i-= backtrack;
-                        while (backtrack > 0) {
-                            tempPermutations.add("U'");
-                            backtrack--;
+                        else {
+                            tempPermutations.add("U");
+                            backtrack++;
                         }
-                    } else {
-                        tempPermutations.add("U");
-                        backtrack++;
-                    }
-
-                    //ADD CALCULATED PERMUTATIONS TO FINAL ARRAY LIST AND PERFORM CALCULATED PERMUTATIONS ON CUBE CLONE
-                    for (String s : tempPermutations){
-                        finalPermutations.add(s);
-                        if (s.length() > 1 && s.charAt(1) == '\'')
-                            cubeStateClone.rotate(s, -1);
-                        else
-                            cubeStateClone.rotate(s, 1);
                     }
                 }
+                //ADD CALCULATED PERMUTATIONS TO FINAL ARRAY LIST AND PERFORM CALCULATED PERMUTATIONS ON CUBE CLONE
+                for (String s : tempPermutations){
+                    finalPermutations.add(s);
+                    if (s.length() > 1 && s.charAt(1) == '\'')
+                        cubeStateClone.rotate(s.charAt(0) + "", -1);
+                    else
+                        cubeStateClone.rotate(s, 1);
+                }
             }
-        }
         return finalPermutations;
     }
 
@@ -130,7 +135,7 @@ public class Solver {
     }
 
     public ArrayList<String> computePrimaryPermutation(Cubicle source, Cubicle target, String forbid) {
-        ArrayList<String> permuations = new ArrayList<>();
+        ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> relationships = computeNodeRelations(source, target);
         String rule[] = null;
         int sourcePos = -1;
@@ -147,17 +152,17 @@ public class Solver {
                 }
                 int calc = targetPos - sourcePos;
                 if (calc == -2 || calc == 6)
-                    permuations.add(s + '\'');
-                else if (calc == 4 || calc == - 4) {
-                    permuations.add(s);
-                    permuations.add(s);
+                    permutations.add(s + '\'');
+                else if (calc == 4 || calc == -4) {
+                    permutations.add(s);
+                    permutations.add(s);
                 }
                 else
-                    permuations.add(s);
+                    permutations.add(s);
                 break ;
             }
         }
-        return permuations;
+        return permutations;
     }
 
     public ArrayList<String> computeAuxiliaryPermutation(Cubicle cubicle, String target, String forbid) {

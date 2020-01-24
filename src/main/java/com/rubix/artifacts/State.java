@@ -75,6 +75,7 @@ public class State {
     }
 
     public void rotate(String rotation, int direction) {
+        System.out.println("PERM : " + rotation);
         String rule[] = cubicleRotations.get(rotation);
         HashMap<String, Cubicle> clone = cloneCube();
         if (direction > 0){

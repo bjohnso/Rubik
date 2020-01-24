@@ -107,6 +107,19 @@ public class Node3D {
         return null;
     }
 
+    public Node3D cloneNode3D() {
+        Node3D node3D = new Node3D(this.homeCubicle, this.type);
+        node3D.setCurrentCubicle(this.currentCubicle);
+        HashMap<String, Color> hashMapClone = new HashMap<>();
+        node3D.setFaceMap();
+        return node3D;
+    }
+
+
+    public void setFaceMap(HashMap<String, Color> faceMap) {
+        this.faceMap = faceMap;
+    }
+
     public Color getFace(String face){
         return faceMap.get(face);
     }
