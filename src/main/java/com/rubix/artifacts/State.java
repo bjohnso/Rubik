@@ -11,7 +11,7 @@ public class State {
 
     private String rules[];
     private ArrayList<String> scramble = new ArrayList<>();
-    private String solve;
+    private ArrayList<String> solve = new ArrayList<>();
     private HashMap<String, Cubicle> cube = new HashMap<>();
     private HashMap<String, String[]> cubicleRotations = new HashMap<>();
     private HashMap<String, String[]> faceRotations = new HashMap<>();
@@ -75,26 +75,29 @@ public class State {
     }
 
     public void rotate(String rotation, int direction) {
-        System.out.println("PERM : " + rotation);
+        if (direction > 0)
+            System.out.println("PERM : " + rotation);
+        else if (direction < 0)
+            System.out.println("PERM : " + rotation + '\'');
         String rule[] = cubicleRotations.get(rotation);
         HashMap<String, Cubicle> clone = cloneCube();
         if (direction > 0){
             for (int i = 0; i < rule.length; i++){
                 if (i == 0)
-                    cube.put(rule[i], clone.get(rule[rule.length - 2]));
+                    cube.get(rule[i]).setNode3D(clone.get(rule[rule.length - 2]).getNode3D());
                 else if (i == 1)
-                    cube.put(rule[i], clone.get(rule[rule.length - 1]));
+                    cube.get(rule[i]).setNode3D(clone.get(rule[rule.length - 1]).getNode3D());
                 else
-                    cube.put(rule[i], clone.get(rule[i - 2]));
+                    cube.get(rule[i]).setNode3D(clone.get(rule[i - 2]).getNode3D());
             }
         } else {
             for (int i = rule.length - 1; i >= 0; i--) {
                 if (i == rule.length - 1)
-                    cube.put(rule[i], clone.get(rule[1]));
+                    cube.get(rule[i]).setNode3D(clone.get(rule[1]).getNode3D());
                 else if (i == rule.length - 2)
-                    cube.put(rule[i], clone.get(rule[0]));
+                    cube.get(rule[i]).setNode3D(clone.get(rule[0]).getNode3D());
                 else
-                    cube.put(rule[i], clone.get(rule[i + 2]));
+                    cube.get(rule[i]).setNode3D(clone.get(rule[i + 2]).getNode3D());
             }
         }
         updateNodes(rotation, direction);
@@ -146,7 +149,7 @@ public class State {
         return scramble;
     }
 
-    public String getSolve() {
+    public ArrayList<String> getSolve() {
         return solve;
     }
 
@@ -166,6 +169,10 @@ public class State {
         this.faceRotations = faceRotations;
     }
 
+    public void addSolve(String solve) {
+        this.solve.add(solve);
+    }
+
     public void setRules(String[] rules) {
         this.rules = rules;
     }
@@ -174,7 +181,7 @@ public class State {
         this.scramble.add(scramble);
     }
 
-    public void setSolve(String solve) {
+    public void setSolve(ArrayList<String> solve) {
         this.solve = solve;
     }
 

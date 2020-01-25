@@ -180,15 +180,15 @@ public class Renderer extends Canvas {
                 "SOLVE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 60));
         newLine = 0;
         space = -1;
-        /*for (int i = 0; i < state.getSolve().length(); i++) {
+        for (int i = 0; i < state.getSolve().size(); i++) {
             if (i % 5 == 0 && i > 4) {
                 newLine++;
                 space = -1;
             }
             Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.GREEN,
-                    state.getSolve().charAt(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
+                    state.getSolve().get(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
                     (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * newLine));
-        }*/
+        }
     }
 
     public void renderPlanes(Graphics graphics, State state) {

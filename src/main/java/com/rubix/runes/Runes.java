@@ -181,6 +181,19 @@ public class Runes {
             "333",
     };
 
+    /*PERM : F
+    PERM : F
+    PERM : R
+    PERM : D
+    PERM : F
+    PERM : U
+    PERM : U
+    PERM : L
+    PERM : L
+    PERM : L
+    PERM : B*/
+
+
     public static String getMirror(String rotate) {
         switch (rotate){
             case "F":

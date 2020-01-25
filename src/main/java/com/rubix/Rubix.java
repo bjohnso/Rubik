@@ -27,7 +27,19 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
-        Solver solver = new Solver();
+        state.rotate("F", 1);
+        state.rotate("F", 1);
+        state.rotate("R", 1);
+        state.rotate("D", 1);
+        state.rotate("F", 1);
+        state.rotate("U", 1);
+        state.rotate("U", 1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("B", 1);
+        solver = new Solver();
+
         ArrayList<String> solve = solver.solveDaisy(state);
         for (String s : solve) {
             if (s.length() > 1 && s.charAt(1) == '\'')
@@ -35,6 +47,8 @@ public class Rubix implements Runnable{
             else
                 state.rotate(s, 1);
         }
+        state.addSolve("DAISY");
+
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);
@@ -76,6 +90,16 @@ public class Rubix implements Runnable{
                 arg = "L";
             else if (KeyInput.wasPressed(VK_R))
                 arg = "R";
+            else if (KeyInput.wasPressed(VK_1)){
+                ArrayList<String> solve = solver.solveDaisy(state);
+                for (String s : solve) {
+                    if (s.length() > 1 && s.charAt(1) == '\'')
+                        state.rotate(s.charAt(0) + "", -1);
+                    else
+                        state.rotate(s, 1);
+                }
+                state.addSolve("DAISY");
+            }
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {
