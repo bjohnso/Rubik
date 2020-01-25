@@ -27,7 +27,69 @@ public class Rubix implements Runnable{
     public Rubix(){
         //Initialise Window
         state = new State();
+
+        state.rotate("D", 1);
+        state.rotate("F", -1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("B", 1);
+        state.rotate("R", 1);
+        state.rotate("R", 1);
+        state.rotate("B", 1);
+        state.rotate("R", 1);
+        state.rotate("D", 1);
+        state.rotate("D", 1);
+
+        state.rotate("B", -1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("D", 1);
+        state.rotate("R", 1);
         state.rotate("F", 1);
+        state.rotate("U", 1);
+        state.rotate("U", 1);
+        state.rotate("D", -1);
+        state.rotate("R", 1);
+        state.rotate("R", 1);
+
+        state.rotate("F", -1);
+        state.rotate("R", -1);
+        state.rotate("F", 1);
+        state.rotate("F", 1);
+        state.rotate("U", 1);
+        state.rotate("U", 1);
+        state.rotate("F", 1);
+        state.rotate("F", 1);
+        state.rotate("R", -1);
+        state.rotate("U", -1);
+        state.rotate("R", -1);
+        state.rotate("F", -1);
+
+        /*state.rotate("D", 1);
+        state.rotate("R", 1);
+        state.rotate("U", 1);
+        state.rotate("B", 1);
+        state.rotate("B", 1);
+        state.rotate("L", 1);
+        state.rotate("U", 1);
+        state.rotate("D", 1);
+        state.rotate("R", 1);
+        state.rotate("R", 1);
+        state.rotate("D", 1);*/
+
+        /*state.rotate("R", 1);
+        state.rotate("U", 1);
+        state.rotate("L", 1);
+        state.rotate("D", 1);
+        state.rotate("B", 1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("U", 1);
+        state.rotate("B", 1);
+        state.rotate("R", 1);
+        state.rotate("F", 1);*/
+
+        /*state.rotate("F", 1);
         state.rotate("F", 1);
         state.rotate("R", 1);
         state.rotate("D", 1);
@@ -37,7 +99,7 @@ public class Rubix implements Runnable{
         state.rotate("L", 1);
         state.rotate("L", 1);
         state.rotate("L", 1);
-        state.rotate("B", 1);
+        state.rotate("B", 1);*/
         solver = new Solver();
 
         ArrayList<String> solve = solver.solveDaisy(state);

@@ -133,6 +133,9 @@ public class Solver {
             for (String s : targetFaces){
                 if (!s.equalsIgnoreCase(forbid)) {
                     auxiliaryPermutations = computeAuxiliaryPermutation(source, s, forbid);
+                    for (String t : auxiliaryPermutations){
+                        System.out.println("TEST : "  + t);
+                    }
                     String newSource = computeTarget(source, auxiliaryPermutations);
                     Cubicle clone = state.getCube().get(newSource);
                     ArrayList<String> finalPermutations = new ArrayList<>();
@@ -156,10 +159,9 @@ public class Solver {
         System.out.println("COMPUTING PRIME FOR " + source.getPosition() + " TO " + target.getPosition());
         ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> relationships = computeNodeRelations(source, target);
-        String rule[] = null;
+        String rule[];
         int sourcePos = -1;
         int targetPos = -1;
-        int counter = 0;
 
         for (String s: relationships){
                 rule = rotationNodeMap.get(s);
@@ -192,6 +194,7 @@ public class Solver {
         while (it.hasNext()) {
             Map.Entry<String, String[]> pair = it.next();
             String rule[] = pair.getValue();
+            //TODO: INTEGRATE BIAS TOWARD ANTI CLOCKWISE DIRECTION
             if (!pair.getKey().equalsIgnoreCase(plane) &&
                     (source.getNode3D().getFace(pair.getKey()) != null || source.getNode3D().getFace(getMirror(pair.getKey())) != null)) {
                 for (int i = 0; i < rule.length - 1; i++){
@@ -210,14 +213,13 @@ public class Solver {
                 break ;
         }
 
-
         if (permutations.isEmpty()){
             System.out.println("FAILED TO GENERATE AUX PATTERN... ATTEMPTING AUX ALGO");
             for (String s : sourceFaces){
                 if (!s.equalsIgnoreCase(plane)){
                     permutations.add(s + '\'');
                     for (int i = 0; i < rotationFaceMap.get(s).length - 1; i++){
-                        if (rotationFaceMap.get(s)[i].equalsIgnoreCase(plane)) {
+                        if (rotationFaceMap.get(s)[i].equalsIgnoreCase(plane)){
                             permutations.add(getMirror(rotationFaceMap.get(s)[i + 1]) + '\'');
                             break;
                         }
@@ -234,7 +236,7 @@ public class Solver {
         String id = source.getPosition();
         for (String s : permutations){
             String rule[] = rotationNodeMap.get(s.charAt(0) + "");
-            for (int i = 0; i < rule.length - 1; i++){
+            for (int i = 0; i < rule.length; i++){
                 if (id.equalsIgnoreCase(rule[i])){
                     if (s.length() > 1 && s.charAt(1) == '\''){
                         if (i < 2)
@@ -250,6 +252,7 @@ public class Solver {
                     break ;
                 }
             }
+            System.out.println("TESTING TARGET COMPUTATION FOR PERMUTATION : " + s.charAt(0) + " WITH ID : " + id);
         }
         return id;
     }
