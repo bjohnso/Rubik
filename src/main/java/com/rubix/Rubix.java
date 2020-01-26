@@ -28,6 +28,43 @@ public class Rubix implements Runnable{
         //Initialise Window
         state = new State();
 
+        state.rotate("B", 1);
+        state.rotate("B", 1);
+        state.rotate("D", 1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("F", 1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+        state.rotate("B", 1);
+        state.rotate("B", 1);
+        state.rotate("U", 1);
+
+        state.rotate("U", 1);
+        state.rotate("F", -1);
+        state.rotate("L", 1);
+        state.rotate("F", 1);
+        state.rotate("F", 1);
+        state.rotate("L", -1);
+        state.rotate("D", -1);
+        state.rotate("F", 1);
+        state.rotate("D", 1);
+        state.rotate("F", 1);
+        state.rotate("F", 1);
+
+        state.rotate("B", -1);
+        state.rotate("R", 1);
+        state.rotate("L", 1);
+        state.rotate("F", 1);
+        state.rotate("F", 1);
+        state.rotate("B", -1);
+        state.rotate("D", -1);
+        state.rotate("L", -1);
+        state.rotate("F", -1);
+        state.rotate("R", -1);
+        state.rotate("L", 1);
+        state.rotate("L", 1);
+
         state.rotate("D", 1);
         state.rotate("F", -1);
         state.rotate("L", 1);

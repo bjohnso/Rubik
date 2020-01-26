@@ -80,7 +80,6 @@ public class Solver {
                                 tempPermutations.add("U'");
                                 backtrack--;
                             }
-                            solveCount++;
                         }
                         else {
                             tempPermutations.add("U");
@@ -125,6 +124,10 @@ public class Solver {
         ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> primaryPermutation = new ArrayList<>();
         ArrayList<String> auxiliaryPermutations = new ArrayList<>();
+        ArrayList<String> testBias;
+        ArrayList<String> enforceBias = new ArrayList<>();
+        String sourceClone = source.getPosition();
+
         if (forbid.equalsIgnoreCase("NONE"))
             primaryPermutation = computePrimaryPermutation(source, target);
 
@@ -132,11 +135,29 @@ public class Solver {
             ArrayList<String> targetFaces = formatNodeFaces(target);
             for (String s : targetFaces){
                 if (!s.equalsIgnoreCase(forbid)) {
-                    auxiliaryPermutations = computeAuxiliaryPermutation(source, s, forbid);
+                    //ENFORCING CLOCKWISE BIAS
+                    System.out.println("TESTING BIASES...");
+                    testBias = computePrimaryPermutation(source, target);
+                    if (testBias.isEmpty()){
+                        System.out.println("ENFORCING BIAS WITH ROTATION : " + forbid + '\'');
+                        enforceBias.add(forbid + '\'');
+                        sourceClone = computeTarget(source, enforceBias);
+                    } else {
+                        for (String t : testBias){
+                            if (t.equalsIgnoreCase(forbid + '\'')){
+                                System.out.println("ENFORCING BIAS WITH ROTATION : " + forbid + '2');
+                                enforceBias.add(forbid);
+                                enforceBias.add(forbid);
+                                sourceClone = computeTarget(source, enforceBias);
+                                break ;
+                            }
+                        }
+                    }
+                    auxiliaryPermutations = computeAuxiliaryPermutation(state.getCube().get(sourceClone), s, forbid);
                     for (String t : auxiliaryPermutations){
                         System.out.println("TEST : "  + t);
                     }
-                    String newSource = computeTarget(source, auxiliaryPermutations);
+                    String newSource = computeTarget(state.getCube().get(sourceClone), auxiliaryPermutations);
                     Cubicle clone = state.getCube().get(newSource);
                     ArrayList<String> finalPermutations = new ArrayList<>();
                     if (!newSource.equalsIgnoreCase(target.getPosition()))
@@ -147,7 +168,8 @@ public class Solver {
                 }
             }
         }
-
+        for (String s : enforceBias)
+            permutations.add(s);
         for (String s : auxiliaryPermutations)
             permutations.add(s);
         for (String s : primaryPermutation)
@@ -178,6 +200,8 @@ public class Solver {
                     permutations.add(s);
                     permutations.add(s);
                 }
+                else if (calc == 0)
+                    break;
                 else
                     permutations.add(s);
                 break ;
@@ -185,7 +209,7 @@ public class Solver {
         return permutations;
     }
 
-    public ArrayList<String> computeAuxiliaryPermutation(Cubicle source, String targetPlane, String plane) {
+    public ArrayList<String> computeAuxiliaryPermutation(Cubicle source, String targetPlane, String sourcePlane) {
         System.out.println("COMPUTING AUX FOR " + source.getPosition() + " TO " + targetPlane + " PLANE");
         ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> sourceFaces = formatNodeFaces(source);
@@ -194,11 +218,10 @@ public class Solver {
         while (it.hasNext()) {
             Map.Entry<String, String[]> pair = it.next();
             String rule[] = pair.getValue();
-            //TODO: INTEGRATE BIAS TOWARD ANTI CLOCKWISE DIRECTION
-            if (!pair.getKey().equalsIgnoreCase(plane) &&
+            if (!pair.getKey().equalsIgnoreCase(sourcePlane) &&
                     (source.getNode3D().getFace(pair.getKey()) != null || source.getNode3D().getFace(getMirror(pair.getKey())) != null)) {
                 for (int i = 0; i < rule.length - 1; i++){
-                    if (rule[i].equalsIgnoreCase(plane) && rule[i + 1].equalsIgnoreCase(targetPlane)){
+                    if (rule[i].equalsIgnoreCase(sourcePlane) && rule[i + 1].equalsIgnoreCase(targetPlane)){
                         System.out.println("FOUND SIMPLE AUX");
                         //Check if Rotation is mirror
                         if (source.getNode3D().getFace(pair.getKey()) != null)
@@ -216,19 +239,18 @@ public class Solver {
         if (permutations.isEmpty()){
             System.out.println("FAILED TO GENERATE AUX PATTERN... ATTEMPTING AUX ALGO");
             for (String s : sourceFaces){
-                if (!s.equalsIgnoreCase(plane)){
+                if (!s.equalsIgnoreCase(sourcePlane)){
                     permutations.add(s + '\'');
                     for (int i = 0; i < rotationFaceMap.get(s).length - 1; i++){
-                        if (rotationFaceMap.get(s)[i].equalsIgnoreCase(plane)){
+                        if (rotationFaceMap.get(s)[i].equalsIgnoreCase(sourcePlane)){
                             permutations.add(getMirror(rotationFaceMap.get(s)[i + 1]) + '\'');
                             break;
                         }
                     }
                 }
             }
-            permutations.add(plane);
+            permutations.add(sourcePlane);
         }
-
         return permutations;
     }
 
