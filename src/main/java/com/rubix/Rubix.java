@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 
 import static com.rubix.solver.Cross.solveCross;
 import static com.rubix.solver.Daisy.solveDaisy;
+import static com.rubix.solver.F2L.solveFL;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.KeyEvent.VK_R;
 
@@ -153,6 +154,13 @@ public class Rubix implements Runnable{
                 state.rotate(s, 1);
         }
         solve = solveCross(state);
+        for (String s : solve) {
+            if (s.length() > 1 && s.charAt(1) == '\'')
+                state.rotate(s.charAt(0) + "", -1);
+            else
+                state.rotate(s, 1);
+        }
+        solve = solveFL(state);
         for (String s : solve) {
             if (s.length() > 1 && s.charAt(1) == '\'')
                 state.rotate(s.charAt(0) + "", -1);
