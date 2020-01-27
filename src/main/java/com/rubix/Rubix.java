@@ -7,6 +7,8 @@ import com.rubix.input.KeyInput;
 import com.rubix.rendering.window.Renderer;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,141 +21,151 @@ import static java.awt.event.KeyEvent.VK_R;
 public class Rubix implements Runnable{
 
     private Renderer renderer;
-    private Util solver;
     private boolean running;
     private State state;
+    private ArrayList<String> rotateQueue = new ArrayList<>();
+    private String solve = "";
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(new Rubix());
     }
 
+    private void solveTimer() {
+        Timer delayTimer = new Timer();
+        delayTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!solve.equalsIgnoreCase("")) {
+                    if (solve.equalsIgnoreCase("DAISY")){
+                        ArrayList<String> solve = solveDaisy(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("DAISY");
+                    } else if (solve.equalsIgnoreCase("CROSS")){
+                        ArrayList<String> solve = solveCross(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("CROSS");
+                    } else if (solve.equalsIgnoreCase("FL")){
+                        ArrayList<String> solve = solveFL(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("FL");
+                    }
+                    solve = "";
+                }
+            }
+        }, 0,500);
+    }
+
+    private void rotateTimer() {
+        Timer delayTimer = new Timer();
+        delayTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!rotateQueue.isEmpty()) {
+                    String rotation = rotateQueue.get(0);
+                    if (rotation.length() > 1 && rotation.charAt(1) == '\'')
+                        state.rotate(rotation.charAt(0) + "", -1);
+                    else
+                        state.rotate(rotation, 1);
+                    rotateQueue.remove(0);
+                }
+            }
+        }, 0,100);
+    }
+
     public Rubix(){
         //Initialise Window
         state = new State();
 
-        state.rotate("B", 1);
-        state.rotate("B", 1);
-        state.rotate("D", 1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("F", 1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("B", 1);
-        state.rotate("B", 1);
-        state.rotate("U", 1);
+        rotateQueue.add("B");
+        rotateQueue.add("B");
+        rotateQueue.add("D");
+        rotateQueue.add("L");
+        rotateQueue.add("L");
+        rotateQueue.add("F");
+        rotateQueue.add("L");
+        rotateQueue.add("L");
+        rotateQueue.add("B");
+        rotateQueue.add("B");
+        rotateQueue.add("U");
 
-        state.rotate("U", 1);
-        state.rotate("F", -1);
-        state.rotate("L", 1);
-        state.rotate("F", 1);
-        state.rotate("F", 1);
-        state.rotate("L", -1);
-        state.rotate("D", -1);
-        state.rotate("F", 1);
-        state.rotate("D", 1);
-        state.rotate("F", 1);
-        state.rotate("F", 1);
+        rotateQueue.add("U");
+        rotateQueue.add("F'");
+        rotateQueue.add("L");
+        rotateQueue.add("F");
+        rotateQueue.add("F");
+        rotateQueue.add("L'");
+        rotateQueue.add("D'");
+        rotateQueue.add("F");
+        rotateQueue.add("D");
+        rotateQueue.add("F");
+        rotateQueue.add("F");
 
-        state.rotate("B", -1);
-        state.rotate("R", 1);
-        state.rotate("L", 1);
-        state.rotate("F", 1);
-        state.rotate("F", 1);
-        state.rotate("B", -1);
-        state.rotate("D", -1);
-        state.rotate("L", -1);
-        state.rotate("F", -1);
-        state.rotate("R", -1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
+        rotateQueue.add("B'");
+        rotateQueue.add("R");
+        rotateQueue.add("L");
+        rotateQueue.add("F");
+        rotateQueue.add("F");
+        rotateQueue.add("B'");
+        rotateQueue.add("D'");
+        rotateQueue.add("L'");
+        rotateQueue.add("F'");
+        rotateQueue.add("R'");
+        rotateQueue.add("L");
+        rotateQueue.add("L");
 
-        state.rotate("D", 1);
-        state.rotate("F", -1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("B", 1);
-        state.rotate("R", 1);
-        state.rotate("R", 1);
-        state.rotate("B", 1);
-        state.rotate("R", 1);
-        state.rotate("D", 1);
-        state.rotate("D", 1);
+        rotateQueue.add("D");
+        rotateQueue.add("F'");
+        rotateQueue.add("L");
+        rotateQueue.add("L");
+        rotateQueue.add("B");
+        rotateQueue.add("R");
+        rotateQueue.add("R");
+        rotateQueue.add("B");
+        rotateQueue.add("R");
+        rotateQueue.add("D");
+        rotateQueue.add("D");
 
-        state.rotate("B", -1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("D", 1);
-        state.rotate("R", 1);
-        state.rotate("F", 1);
-        state.rotate("U", 1);
-        state.rotate("U", 1);
-        state.rotate("D", -1);
-        state.rotate("R", 1);
-        state.rotate("R", 1);
+        rotateQueue.add("B'");
+        rotateQueue.add("L");
+        rotateQueue.add("L");
+        rotateQueue.add("D");
+        rotateQueue.add("R");
+        rotateQueue.add("F");
+        rotateQueue.add("U");
+        rotateQueue.add("U");
+        rotateQueue.add("D'");
+        rotateQueue.add("R");
+        rotateQueue.add("R");
 
-        state.rotate("F", -1);
-        state.rotate("R", -1);
-        state.rotate("F", 1);
-        state.rotate("F", 1);
-        state.rotate("U", 1);
-        state.rotate("U", 1);
-        state.rotate("F", 1);
-        state.rotate("F", 1);
-        state.rotate("R", -1);
-        state.rotate("U", -1);
-        state.rotate("R", -1);
-        state.rotate("F", -1);
-
-        /*state.rotate("D", 1);
-        state.rotate("R", 1);
-        state.rotate("U", 1);
-        state.rotate("B", 1);
-        state.rotate("B", 1);
-        state.rotate("L", 1);
-        state.rotate("U", 1);
-        state.rotate("D", 1);
-        state.rotate("R", 1);
-        state.rotate("R", 1);
-        state.rotate("D", 1);*/
-
-        /*state.rotate("R", 1);
-        state.rotate("U", 1);
-        state.rotate("L", 1);
-        state.rotate("D", 1);
-        state.rotate("B", 1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("U", 1);
-        state.rotate("B", 1);
-        state.rotate("R", 1);
-        state.rotate("F", 1);*/
-
-        /*state.rotate("F", 1);
-        state.rotate("F", 1);
-        state.rotate("R", 1);
-        state.rotate("D", 1);
-        state.rotate("F", 1);
-        state.rotate("U", 1);
-        state.rotate("U", 1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("L", 1);
-        state.rotate("B", 1);*/
+        rotateQueue.add("F'");
+        rotateQueue.add("R'");
+        rotateQueue.add("F");
+        rotateQueue.add("F");
+        rotateQueue.add("U");
+        rotateQueue.add("U");
+        rotateQueue.add("F");
+        rotateQueue.add("F");
+        rotateQueue.add("R'");
+        rotateQueue.add("U'");
+        rotateQueue.add("R'");
+        rotateQueue.add("F'");
 
         //SOLVE
 
-        ArrayList<String> solve = new ArrayList<>();
+        //ArrayList<String> solve = new ArrayList<>();
 
-        solve = solveDaisy(state);
+        /*solve = solveDaisy(state);
         for (String s : solve) {
             if (s.length() > 1 && s.charAt(1) == '\'')
                 state.rotate(s.charAt(0) + "", -1);
             else
                 state.rotate(s, 1);
-        }
-        solve = solveCross(state);
+        }*/
+        /*solve = solveCross(state);
         for (String s : solve) {
             if (s.length() > 1 && s.charAt(1) == '\'')
                 state.rotate(s.charAt(0) + "", -1);
@@ -166,8 +178,9 @@ public class Rubix implements Runnable{
                 state.rotate(s.charAt(0) + "", -1);
             else
                 state.rotate(s, 1);
-        }
-
+        }*/
+        solveTimer();
+        rotateTimer();
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
         renderer.addKeyListener(keyInput);
@@ -178,7 +191,6 @@ public class Rubix implements Runnable{
     private void tick() {
         //Input Listeners
         String arg = "";
-
         if (KeyInput.isDown(VK_SHIFT)) {
             if (KeyInput.wasPressed(VK_F))
                 arg = "F'";
@@ -209,6 +221,12 @@ public class Rubix implements Runnable{
                 arg = "L";
             else if (KeyInput.wasPressed(VK_R))
                 arg = "R";
+            else if (KeyInput.wasPressed(VK_1))
+                solve = "DAISY";
+            else if (KeyInput.wasPressed(VK_2))
+                solve = "CROSS";
+            else if (KeyInput.wasPressed(VK_3))
+                solve = "FL";
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {

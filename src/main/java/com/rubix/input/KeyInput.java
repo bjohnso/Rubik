@@ -3,7 +3,6 @@ package com.rubix.input;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.*;
-import java.util.concurrent.*;
 
 public class KeyInput extends KeyAdapter {
 
@@ -27,8 +26,8 @@ public class KeyInput extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         if (!timer) {
-            keys[e.getKeyCode()] = true;
             createTimer();
+            keys[e.getKeyCode()] = true;
         }
     }
 

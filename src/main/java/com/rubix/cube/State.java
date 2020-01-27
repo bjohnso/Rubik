@@ -10,6 +10,7 @@ import static com.rubix.runes.Runes.*;
 public class State {
 
     private String rules[];
+    private String lastRotation = "";
     private ArrayList<String> scramble = new ArrayList<>();
     private ArrayList<String> solve = new ArrayList<>();
     private HashMap<String, Cubicle> cube = new HashMap<>();
@@ -75,10 +76,14 @@ public class State {
     }
 
     public void rotate(String rotation, int direction) {
-        if (direction > 0)
-            System.out.println("PERM : " + rotation);
-        else if (direction < 0)
-            System.out.println("PERM : " + rotation + '\'');
+        if (direction > 0) {
+            lastRotation = rotation;
+            System.out.println("PERM : " + lastRotation);
+        }
+        else if (direction < 0) {
+            lastRotation = rotation + '\'';
+            System.out.println("PERM : " + lastRotation);
+        }
         String rule[] = cubicleRotations.get(rotation);
         HashMap<String, Cubicle> clone = cloneCube();
         if (direction > 0){
@@ -183,6 +188,10 @@ public class State {
 
     public void setSolve(ArrayList<String> solve) {
         this.solve = solve;
+    }
+
+    public String getLastRotation() {
+        return lastRotation;
     }
 
     public State cloneState() {

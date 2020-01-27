@@ -158,10 +158,15 @@ public class Renderer extends Canvas {
 
     public void renderTelemetry(Graphics graphics, State state) {
         Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.RED,
-                "SCRAMBLE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 20));
-        int newLine = 0;
-        int space = -1;
-        for (int i = 0; i < state.getScramble().size(); i++) {
+                "ROTATION : ", (windowWidth / 100 * 3), (windowHeight / 100 * 20));
+
+        Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 10), Color.RED,
+                state.getLastRotation(), (windowWidth / 100 * 3) + (windowWidth / 100 * 3),
+                (windowHeight / 100 * 30) + (windowHeight / 100 * 5));
+
+        /*int newLine = 0;
+        int space = -1;*/
+        /*for (int i = 0; i < state.getScramble().size(); i++) {
             if (i % 5 == 0 && i > 4) {
                 newLine++;
                 space = -1;
@@ -169,20 +174,14 @@ public class Renderer extends Canvas {
             Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.RED,
                     state.getScramble().get(i), (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
                     (windowHeight / 100 * 25) + (windowHeight / 100 * 5 * newLine));
-        }
+        }*/
 
         Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.GREEN,
                 "SOLVE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 60));
-        newLine = 0;
-        space = -1;
         for (int i = 0; i < state.getSolve().size(); i++) {
-            if (i % 5 == 0 && i > 4) {
-                newLine++;
-                space = -1;
-            }
             Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.GREEN,
-                    state.getSolve().get(i) + "", (windowWidth / 100 * 3) + (windowWidth / 100 * 3 * ++space),
-                    (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * newLine));
+                    state.getSolve().get(i) + "", (windowWidth / 100 * 3),
+                    (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * i));
         }
     }
 
