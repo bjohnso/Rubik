@@ -1,7 +1,8 @@
 package com.rubix;
 
-import com.rubix.artifacts.Solver;
-import com.rubix.artifacts.State;
+import com.rubix.solver.Daisy;
+import com.rubix.solver.Util;
+import com.rubix.cube.State;
 import com.rubix.input.KeyInput;
 import com.rubix.rendering.window.Renderer;
 
@@ -9,13 +10,15 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.rubix.solver.Cross.solveCross;
+import static com.rubix.solver.Daisy.solveDaisy;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.KeyEvent.VK_R;
 
 public class Rubix implements Runnable{
 
     private Renderer renderer;
-    private Solver solver;
+    private Util solver;
     private boolean running;
     private State state;
 
@@ -137,16 +140,25 @@ public class Rubix implements Runnable{
         state.rotate("L", 1);
         state.rotate("L", 1);
         state.rotate("B", 1);*/
-        solver = new Solver();
 
-        ArrayList<String> solve = solver.solveDaisy(state);
+        //SOLVE
+
+        ArrayList<String> solve = new ArrayList<>();
+
+        solve = solveDaisy(state);
         for (String s : solve) {
             if (s.length() > 1 && s.charAt(1) == '\'')
                 state.rotate(s.charAt(0) + "", -1);
             else
                 state.rotate(s, 1);
         }
-        state.addSolve("DAISY");
+        solve = solveCross(state);
+        for (String s : solve) {
+            if (s.length() > 1 && s.charAt(1) == '\'')
+                state.rotate(s.charAt(0) + "", -1);
+            else
+                state.rotate(s, 1);
+        }
 
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
@@ -189,16 +201,6 @@ public class Rubix implements Runnable{
                 arg = "L";
             else if (KeyInput.wasPressed(VK_R))
                 arg = "R";
-            else if (KeyInput.wasPressed(VK_1)){
-                ArrayList<String> solve = solver.solveDaisy(state);
-                for (String s : solve) {
-                    if (s.length() > 1 && s.charAt(1) == '\'')
-                        state.rotate(s.charAt(0) + "", -1);
-                    else
-                        state.rotate(s, 1);
-                }
-                state.addSolve("DAISY");
-            }
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {

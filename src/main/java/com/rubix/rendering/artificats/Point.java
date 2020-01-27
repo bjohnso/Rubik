@@ -1,4 +1,4 @@
-package com.rubix.rendering.runes;
+package com.rubix.rendering.artificats;
 
 public class Point {
 

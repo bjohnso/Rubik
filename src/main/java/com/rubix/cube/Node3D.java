@@ -1,11 +1,9 @@
-package com.rubix.artifacts;
+package com.rubix.cube;
 
 import java.awt.*;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.rubix.runes.Runes.*;
 
@@ -14,7 +12,8 @@ public class Node3D {
     private String currentCubicle;
     private String homeCubicle;
     private String type;
-    private HashMap<String, Color> faceMap = new HashMap<>();
+    private HashMap<String, Color> faceMap;
+    private HashMap<String, Color> defaultFaceMap = new HashMap<>();
 
     public Node3D(String homeCubicle, String type) {
         this.homeCubicle = homeCubicle;
@@ -97,6 +96,12 @@ public class Node3D {
         }
     }
 
+    public void addDefaultFace(String face, Color color) {
+        if (defaultFaceMap.get(face) == null){
+            defaultFaceMap.put(face, color);
+        }
+    }
+
     public String getColor(Color color) {
         Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
         while (it.hasNext()){
@@ -110,19 +115,49 @@ public class Node3D {
     public Node3D cloneNode3D() {
         Node3D node3D = new Node3D(this.homeCubicle, this.type);
         node3D.setCurrentCubicle(this.currentCubicle);
-        HashMap<String, Color> hashMapClone = new HashMap<>();
-        Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
-        while (it.hasNext()){
-            Map.Entry<String, Color> pair = it.next();
-            hashMapClone.put(pair.getKey(), pair.getValue());
-        }
-        node3D.setFaceMap(hashMapClone);
+        node3D.setDefaultFaceMap(this.cloneDefaultFaceMap());
+        node3D.setFaceMap(this.cloneFaceMap());
         return node3D;
     }
 
+    public HashMap<String, Color> cloneFaceMap() {
+        HashMap<String, Color> clone  = new HashMap<>();
+
+        Iterator<Map.Entry<String, Color>> it  = faceMap.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry<String, Color> pair = it.next();
+            clone.put(pair.getKey(), pair.getValue());
+        }
+        return clone;
+    }
+
+    public HashMap<String, Color> cloneDefaultFaceMap() {
+        HashMap<String, Color> clone = new HashMap<>();
+        Iterator<Map.Entry<String, Color>> it = defaultFaceMap.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Color> pair = it.next();
+            clone.put(pair.getKey(), pair.getValue());
+        }
+        return clone;
+    }
+
+    public boolean isTwisted() {
+        Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry<String, Color> pair = it.next();
+            if (defaultFaceMap.get(pair.getKey()) != pair.getValue())
+                return true;
+        }
+        return false;
+    }
 
     public void setFaceMap(HashMap<String, Color> faceMap) {
         this.faceMap = faceMap;
+    }
+
+    public void setDefaultFaceMap(HashMap<String, Color> defaultFaceMap) {
+        this.defaultFaceMap = defaultFaceMap;
     }
 
     public Color getFace(String face){

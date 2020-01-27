@@ -1,8 +1,8 @@
 package com.rubix.rendering.window;
 
 import com.rubix.Rubix;
-import com.rubix.artifacts.State;
-import com.rubix.rendering.runes.Point;
+import com.rubix.cube.State;
+import com.rubix.rendering.artificats.Point;
 import com.rubix.rendering.ui.Fonts;
 
 import javax.swing.*;
@@ -10,12 +10,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
-
-import com.rubix.rendering.runes.*;
 
 public class Renderer extends Canvas {
 

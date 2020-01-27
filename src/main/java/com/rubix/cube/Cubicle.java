@@ -1,4 +1,4 @@
-package com.rubix.artifacts;
+package com.rubix.cube;
 
 import java.awt.*;
 
@@ -16,17 +16,18 @@ public class Cubicle {
     private void initNode() {
         this.node3D = new Node3D(this.position, this.type);
         if (position.charAt(1) == '1')
-            node3D.addFace("F", Color.RED);
+            node3D.addDefaultFace("F", Color.RED);
         if (position.charAt(1) == '3')
-            node3D.addFace("B", Color.MAGENTA);
+            node3D.addDefaultFace("B", Color.MAGENTA);
         if (position.charAt(0) == '1')
-            node3D.addFace("D", Color.WHITE);
+            node3D.addDefaultFace("D", Color.WHITE);
         if (position.charAt(0) == '3')
-            node3D.addFace("U", Color.YELLOW);
+            node3D.addDefaultFace("U", Color.YELLOW);
         if (position.charAt(2) == '1')
-            node3D.addFace("L", Color.BLUE);
+            node3D.addDefaultFace("L", Color.BLUE);
         if (position.charAt(2) == '3')
-            node3D.addFace("R", Color.GREEN);
+            node3D.addDefaultFace("R", Color.GREEN);
+        this.node3D.setFaceMap(this.node3D.cloneDefaultFaceMap());
         this.node3D.setCurrentCubicle(position);
     }
 

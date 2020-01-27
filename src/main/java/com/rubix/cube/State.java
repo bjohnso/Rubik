@@ -1,4 +1,4 @@
-package com.rubix.artifacts;
+package com.rubix.cube;
 
 import java.util.ArrayList;
 import java.util.HashMap;
