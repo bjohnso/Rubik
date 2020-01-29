@@ -15,6 +15,7 @@ import static com.rubix.runes.Runes.ROTATION_FACES_R;
 public class Util {
 
     protected static HashMap<String, String[]> planeMap = new HashMap<>();
+    protected static HashMap<String, String[]> layerMap = new HashMap<>();
     protected static HashMap<String, String[]> rotationNodeMap = new HashMap<>();
     protected static HashMap<String, String[]> rotationFaceMap = new HashMap<>();
 
@@ -26,6 +27,10 @@ public class Util {
         planeMap.put("D", PLANE_D);
         planeMap.put("L", PLANE_L);
         planeMap.put("R", PLANE_R);
+
+        layerMap.put("1", PLANE_D);
+        layerMap.put("2", LAYER_2);
+        layerMap.put("3", PLANE_U);
 
         //CONTAINS RULES DEFINING ROTATIONS BY ORDER OF NODES
         rotationNodeMap.put("F", ROTATION_NODES_F);

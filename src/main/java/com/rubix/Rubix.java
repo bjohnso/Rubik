@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import static com.rubix.solver.Cross.solveCross;
 import static com.rubix.solver.Daisy.solveDaisy;
 import static com.rubix.solver.F2L.solveFL;
+import static com.rubix.solver.F2L.solveSL;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.KeyEvent.VK_R;
 
@@ -52,6 +53,11 @@ public class Rubix implements Runnable{
                         for (String s : solve)
                             rotateQueue.add(s);
                         state.addSolve("FL");
+                    } else if (solve.equalsIgnoreCase("SL")){
+                        ArrayList<String> solve = solveSL(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("SL");
                     }
                     solve = "";
                 }
@@ -227,6 +233,8 @@ public class Rubix implements Runnable{
                 solve = "CROSS";
             else if (KeyInput.wasPressed(VK_3))
                 solve = "FL";
+            else if (KeyInput.wasPressed(VK_4))
+                solve = "SL";
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {

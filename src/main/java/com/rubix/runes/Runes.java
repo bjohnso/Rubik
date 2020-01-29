@@ -108,6 +108,19 @@ public class Runes {
             "U"
     };
 
+    //COLLECTION OF LAYERS
+    public static final String LAYER_2[] = {
+            "211",
+            "212",
+            "213",
+            "221",
+            "222",
+            "223",
+            "231",
+            "232",
+            "233"
+    };
+
     //COLLECTION OF PLANES
     public static final String PLANE_F[] = {
             "111",
