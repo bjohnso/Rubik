@@ -1,7 +1,5 @@
 package com.rubix;
 
-import com.rubix.solver.Daisy;
-import com.rubix.solver.Util;
 import com.rubix.cube.State;
 import com.rubix.input.KeyInput;
 import com.rubix.rendering.window.Renderer;
@@ -12,10 +10,10 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.rubix.solver.Cross.solveCross;
-import static com.rubix.solver.Daisy.solveDaisy;
+import static com.rubix.solver.Cross.*;
 import static com.rubix.solver.F2L.solveFL;
 import static com.rubix.solver.F2L.solveSL;
+import static com.rubix.solver.OLL.*;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.KeyEvent.VK_R;
 
@@ -58,6 +56,16 @@ public class Rubix implements Runnable{
                         for (String s : solve)
                             rotateQueue.add(s);
                         state.addSolve("SL");
+                    } else if (solve.equalsIgnoreCase("OLLEDGES")){
+                        ArrayList<String> solve = solveOLLEdges(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("OLL EDGES");
+                    } else if (solve.equalsIgnoreCase("OLLCORNERS")){
+                        ArrayList<String> solve = solveOLLCorners(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("OLL CORNERS");
                     }
                     solve = "";
                 }
@@ -86,7 +94,7 @@ public class Rubix implements Runnable{
         //Initialise Window
         state = new State();
 
-        /*rotateQueue.add("B");
+        rotateQueue.add("B");
         rotateQueue.add("B");
         rotateQueue.add("D");
         rotateQueue.add("L");
@@ -96,7 +104,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("L");
         rotateQueue.add("B");
         rotateQueue.add("B");
-        rotateQueue.add("U");*/
+        rotateQueue.add("U");
 
         rotateQueue.add("U");
         rotateQueue.add("F'");
@@ -110,7 +118,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("F");
         rotateQueue.add("F");
 
-        /*rotateQueue.add("B'");
+        rotateQueue.add("B'");
         rotateQueue.add("R");
         rotateQueue.add("L");
         rotateQueue.add("F");
@@ -121,7 +129,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("F'");
         rotateQueue.add("R'");
         rotateQueue.add("L");
-        rotateQueue.add("L");*/
+        rotateQueue.add("L");
 
         rotateQueue.add("D");
         rotateQueue.add("F'");
@@ -135,7 +143,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("D");
         rotateQueue.add("D");
 
-        /*rotateQueue.add("B'");
+        rotateQueue.add("B'");
         rotateQueue.add("L");
         rotateQueue.add("L");
         rotateQueue.add("D");
@@ -145,7 +153,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("U");
         rotateQueue.add("D'");
         rotateQueue.add("R");
-        rotateQueue.add("R");*/
+        rotateQueue.add("R");
 
         rotateQueue.add("F'");
         rotateQueue.add("R'");
@@ -235,6 +243,10 @@ public class Rubix implements Runnable{
                 solve = "FL";
             else if (KeyInput.wasPressed(VK_4))
                 solve = "SL";
+            else if (KeyInput.wasPressed(VK_5))
+                solve = "OLLEDGES";
+            else if (KeyInput.wasPressed(VK_6))
+                solve = "OLLCORNERS";
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {
