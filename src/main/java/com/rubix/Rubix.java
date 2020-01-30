@@ -86,7 +86,7 @@ public class Rubix implements Runnable{
         //Initialise Window
         state = new State();
 
-        rotateQueue.add("B");
+        /*rotateQueue.add("B");
         rotateQueue.add("B");
         rotateQueue.add("D");
         rotateQueue.add("L");
@@ -96,7 +96,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("L");
         rotateQueue.add("B");
         rotateQueue.add("B");
-        rotateQueue.add("U");
+        rotateQueue.add("U");*/
 
         rotateQueue.add("U");
         rotateQueue.add("F'");
@@ -110,7 +110,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("F");
         rotateQueue.add("F");
 
-        rotateQueue.add("B'");
+        /*rotateQueue.add("B'");
         rotateQueue.add("R");
         rotateQueue.add("L");
         rotateQueue.add("F");
@@ -121,7 +121,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("F'");
         rotateQueue.add("R'");
         rotateQueue.add("L");
-        rotateQueue.add("L");
+        rotateQueue.add("L");*/
 
         rotateQueue.add("D");
         rotateQueue.add("F'");
@@ -135,7 +135,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("D");
         rotateQueue.add("D");
 
-        rotateQueue.add("B'");
+        /*rotateQueue.add("B'");
         rotateQueue.add("L");
         rotateQueue.add("L");
         rotateQueue.add("D");
@@ -145,7 +145,7 @@ public class Rubix implements Runnable{
         rotateQueue.add("U");
         rotateQueue.add("D'");
         rotateQueue.add("R");
-        rotateQueue.add("R");
+        rotateQueue.add("R");*/
 
         rotateQueue.add("F'");
         rotateQueue.add("R'");
@@ -162,9 +162,9 @@ public class Rubix implements Runnable{
 
         //SOLVE
 
-        //ArrayList<String> solve = new ArrayList<>();
+        /*ArrayList<String> solve = new ArrayList<>();
 
-        /*solve = solveDaisy(state);
+        solve = solveDaisy(state);
         for (String s : solve) {
             if (s.length() > 1 && s.charAt(1) == '\'')
                 state.rotate(s.charAt(0) + "", -1);

@@ -225,7 +225,7 @@ public class Util {
                             id = rule[i - 2];
                     } else {
                         if (i > rule.length - 3)
-                            id = rule[i - rule.length - 2];
+                            id = rule[i - rule.length + 2];
                         else
                             id = rule[i + 2];
                     }
