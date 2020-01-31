@@ -5,25 +5,9 @@ import com.rubix.cube.State;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static com.rubix.solver.Util.computeNodeRelations;
 import static com.rubix.solver.Util.computePrimaryPermutation;
 
 public class OLL {
-
-    private static String[] edgesTop = {
-            "312",
-            "321",
-            "332",
-            "323"
-    };
-
-    private static String[] cornersTop = {
-            "311",
-            "331",
-            "333",
-            "313"
-    };
 
     public static ArrayList<String> solveOLLEdges(State state) {
 
@@ -117,117 +101,24 @@ public class OLL {
         return finalPermutations;
     }
 
-    public static ArrayList<String> solveOLLCorners(State state){
-
+    public static ArrayList<String> solveOLLCorners(State state) {
         State cubeStateClone = state.cloneState();
         ArrayList<String> finalPermutations = new ArrayList<>();
 
-        ArrayList<Cubicle> unsolves = new ArrayList<>();
-        int solveCount = 0;
+        int untwisted = 0;
 
-        for (int i = 0; i < cornersTop.length; i++){
-            Cubicle target = cubeStateClone.getCube().get(cornersTop[i]);
-            if (target.getNode3D().isSolved())
-                solveCount++;
-            else
-                unsolves.add(target);
+        while (untwisted < 4) {
             ArrayList<String> tempPermutations = new ArrayList<>();
-
-            if (i == cornersTop.length - 1 && solveCount < 4){
-                if (solveCount == 2){
-                    System.out.println("SOLVE COUNT 2");
-                    ArrayList<String> relationship = computeNodeRelations(unsolves.get(0), unsolves.get(1));
-                    if (!relationship.isEmpty()){
-                        for (String s : relationship){
-                            if (s.equalsIgnoreCase("L")){
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("L'");
-                                    tempPermutations.add("U'");
-                                    tempPermutations.add("L");
-                                    tempPermutations.add("U");
-                                }
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("F");
-                                    tempPermutations.add("U");
-                                    tempPermutations.add("F'");
-                                    tempPermutations.add("U'");
-                                }
-                            } else if (s.equalsIgnoreCase("B")){
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("B");
-                                    tempPermutations.add("U");
-                                    tempPermutations.add("B'");
-                                    tempPermutations.add("U'");
-                                }
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("R'");
-                                    tempPermutations.add("U'");
-                                    tempPermutations.add("R");
-                                    tempPermutations.add("U");
-                                }
-                            } else if (s.equalsIgnoreCase("R")){
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("R");
-                                    tempPermutations.add("U");
-                                    tempPermutations.add("R'");
-                                    tempPermutations.add("U'");
-                                }
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("F'");
-                                    tempPermutations.add("U'");
-                                    tempPermutations.add("F");
-                                    tempPermutations.add("U");
-                                }
-                            } else if (s.equalsIgnoreCase("F")){
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("F");
-                                    tempPermutations.add("U");
-                                    tempPermutations.add("F'");
-                                    tempPermutations.add("U'");
-                                }
-                                for(int j = 0; j < 3; j++){
-                                    tempPermutations.add("L'");
-                                    tempPermutations.add("U'");
-                                    tempPermutations.add("L");
-                                    tempPermutations.add("U");
-                                }
-                            }
-                        }
-                    } else {
-                        for(int j = 0; j < 3; j++){
-                            tempPermutations.add("L'");
-                            tempPermutations.add("U'");
-                            tempPermutations.add("L");
-                            tempPermutations.add("U");
-                        }
-                        for(int j = 0; j < 3; j++){
-                            tempPermutations.add("F");
-                            tempPermutations.add("U");
-                            tempPermutations.add("F'");
-                            tempPermutations.add("U'");
-                        }
-                        for(int j = 0; j < 3; j++){
-                            tempPermutations.add("B");
-                            tempPermutations.add("U");
-                            tempPermutations.add("B'");
-                            tempPermutations.add("U'");
-                        }
-                        for(int j = 0; j < 3; j++){
-                            tempPermutations.add("R'");
-                            tempPermutations.add("U'");
-                            tempPermutations.add("R");
-                            tempPermutations.add("U");
-                        }
-                    }
-                }
-                else if (solveCount == 0 || solveCount == 1) {
-                    System.out.println("SOLVE COUNT 0 OR 1");
-                    tempPermutations.add("U");
-                }
-
-                i = -1;
-                solveCount = 0;
-                unsolves.clear();
+            Cubicle target = cubeStateClone.getCube().get("311");
+            if (target.getNode3D().getFace("U") != Color.YELLOW){
+                tempPermutations.add("L");
+                tempPermutations.add("D");
+                tempPermutations.add("L'");
+                tempPermutations.add("D'");
+                untwisted = 0;
+            } else {
+                tempPermutations.add("U");
+                untwisted++;
             }
 
             for (String s : tempPermutations){
@@ -238,7 +129,20 @@ public class OLL {
                     cubeStateClone.rotate(s, 1);
             }
         }
+
+        for (String s : orientateLL(cubeStateClone))
+            finalPermutations.add(s);
         return finalPermutations;
     }
 
+    public static ArrayList<String> orientateLL(State state){
+        State cubeStateClone = state.cloneState();
+        ArrayList<String> finalPermutations = new ArrayList<>();
+
+        while (!cubeStateClone.getCube().get("311").getNode3D().isSolved()){
+            finalPermutations.add("U");
+            cubeStateClone.rotate("U", 1);
+        }
+        return finalPermutations;
+    }
 }

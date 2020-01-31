@@ -14,6 +14,8 @@ import static com.rubix.solver.Cross.*;
 import static com.rubix.solver.F2L.solveFL;
 import static com.rubix.solver.F2L.solveSL;
 import static com.rubix.solver.OLL.*;
+import static com.rubix.solver.PLL.solvePLLCorners;
+import static com.rubix.solver.PLL.solvePLLEdges;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.KeyEvent.VK_R;
 
@@ -23,6 +25,12 @@ public class Rubix implements Runnable{
     private boolean running;
     private State state;
     private ArrayList<String> rotateQueue = new ArrayList<>();
+    private String[] all = {
+        "DAISY", "CROSS", "FL", "SL",
+        "OLLEDGES", "PLLCORNERS", "OLLCORNERS", "PLLEDGES"
+    };
+    private int allCount = all.length;
+
     private String solve = "";
 
     public static void main(String[] args) {
@@ -30,7 +38,7 @@ public class Rubix implements Runnable{
         executorService.execute(new Rubix());
     }
 
-    private void solveTimer() {
+    private void algoTimer() {
         Timer delayTimer = new Timer();
         delayTimer.schedule(new TimerTask() {
             @Override
@@ -61,11 +69,24 @@ public class Rubix implements Runnable{
                         for (String s : solve)
                             rotateQueue.add(s);
                         state.addSolve("OLL EDGES");
+                    } else if (solve.equalsIgnoreCase("PLLCORNERS")){
+                        ArrayList<String> solve = solvePLLCorners(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("PLL CORNERS");
                     } else if (solve.equalsIgnoreCase("OLLCORNERS")){
                         ArrayList<String> solve = solveOLLCorners(state);
                         for (String s : solve)
                             rotateQueue.add(s);
                         state.addSolve("OLL CORNERS");
+                    } else if (solve.equalsIgnoreCase("PLLEDGES")){
+                        ArrayList<String> solve = solvePLLEdges(state);
+                        for (String s : solve)
+                            rotateQueue.add(s);
+                        state.addSolve("PLL EDGES");
+                    }
+                    else if (solve.equalsIgnoreCase("ALL")){
+                        allCount = 0;
                     }
                     solve = "";
                 }
@@ -87,7 +108,19 @@ public class Rubix implements Runnable{
                     rotateQueue.remove(0);
                 }
             }
-        }, 0,100);
+        }, 0,20);
+    }
+
+    private void allTimer() {
+        Timer delayTimer = new Timer();
+        delayTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (allCount < all.length)
+                    solve = all[allCount];
+                allCount++;
+            }
+        }, 0,3000);
     }
 
     public Rubix(){
@@ -118,6 +151,8 @@ public class Rubix implements Runnable{
         rotateQueue.add("F");
         rotateQueue.add("F");
 
+        //INFINITE LOOP ON OLL
+
         rotateQueue.add("B'");
         rotateQueue.add("R");
         rotateQueue.add("L");
@@ -130,6 +165,8 @@ public class Rubix implements Runnable{
         rotateQueue.add("R'");
         rotateQueue.add("L");
         rotateQueue.add("L");
+
+        //INFINITE LOOP ON OLL
 
         rotateQueue.add("D");
         rotateQueue.add("F'");
@@ -193,7 +230,8 @@ public class Rubix implements Runnable{
             else
                 state.rotate(s, 1);
         }*/
-        solveTimer();
+        allTimer();
+        algoTimer();
         rotateTimer();
         this.renderer = new Renderer(this);
         KeyInput keyInput = new KeyInput();
@@ -246,7 +284,13 @@ public class Rubix implements Runnable{
             else if (KeyInput.wasPressed(VK_5))
                 solve = "OLLEDGES";
             else if (KeyInput.wasPressed(VK_6))
+                solve = "PLLCORNERS";
+            else if (KeyInput.wasPressed(VK_7))
                 solve = "OLLCORNERS";
+            else if (KeyInput.wasPressed(VK_8))
+                solve = "PLLEDGES";
+            else if (KeyInput.wasPressed(VK_0))
+                solve = "ALL";
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {
