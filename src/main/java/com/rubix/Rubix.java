@@ -35,7 +35,7 @@ public class Rubix implements Runnable{
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Rubix());
+        executorService.execute(new Rubix(args[0]));
     }
 
     private void algoTimer() {
@@ -134,85 +134,10 @@ public class Rubix implements Runnable{
         }, 0,3000);
     }
 
-    public Rubix(){
+    public Rubix(String scramble){
         //Initialise Window
         state = new State();
-
-        rotateQueue.add("B");
-        rotateQueue.add("B");
-        rotateQueue.add("D");
-        rotateQueue.add("L");
-        rotateQueue.add("L");
-        rotateQueue.add("F");
-        rotateQueue.add("L");
-        rotateQueue.add("L");
-        rotateQueue.add("B");
-        rotateQueue.add("B");
-        rotateQueue.add("U");
-
-        rotateQueue.add("U");
-        rotateQueue.add("F'");
-        rotateQueue.add("L");
-        rotateQueue.add("F");
-        rotateQueue.add("F");
-        rotateQueue.add("L'");
-        rotateQueue.add("D'");
-        rotateQueue.add("F");
-        rotateQueue.add("D");
-        rotateQueue.add("F");
-        rotateQueue.add("F");
-
-        //INFINITE LOOP ON OLL
-
-        rotateQueue.add("B'");
-        rotateQueue.add("R");
-        rotateQueue.add("L");
-        rotateQueue.add("F");
-        rotateQueue.add("F");
-        rotateQueue.add("B'");
-        rotateQueue.add("D'");
-        rotateQueue.add("L'");
-        rotateQueue.add("F'");
-        rotateQueue.add("R'");
-        rotateQueue.add("L");
-        rotateQueue.add("L");
-
-        rotateQueue.add("D");
-        rotateQueue.add("F'");
-        rotateQueue.add("L");
-        rotateQueue.add("L");
-        rotateQueue.add("B");
-        rotateQueue.add("R");
-        rotateQueue.add("R");
-        rotateQueue.add("B");
-        rotateQueue.add("R");
-        rotateQueue.add("D");
-        rotateQueue.add("D");
-
-        rotateQueue.add("B'");
-        rotateQueue.add("L");
-        rotateQueue.add("L");
-        rotateQueue.add("D");
-        rotateQueue.add("R");
-        rotateQueue.add("F");
-        rotateQueue.add("U");
-        rotateQueue.add("U");
-        rotateQueue.add("D'");
-        rotateQueue.add("R");
-        rotateQueue.add("R");
-
-        rotateQueue.add("F'");
-        rotateQueue.add("R'");
-        rotateQueue.add("F");
-        rotateQueue.add("F");
-        rotateQueue.add("U");
-        rotateQueue.add("U");
-        rotateQueue.add("F");
-        rotateQueue.add("F");
-        rotateQueue.add("R'");
-        rotateQueue.add("U'");
-        rotateQueue.add("R'");
-        rotateQueue.add("F'");
+        commandParser(scramble);
 
         //SOLVE
 
@@ -363,6 +288,18 @@ public class Rubix implements Runnable{
         }
 
         System.exit(0);
+    }
+
+    private void commandParser(String scramble) {
+        String commands[] = scramble.split(" ");
+        for (int i = 0; i < commands.length; i++) {
+            if (commands[i].contains("2")) {
+                rotateQueue.add(commands[i].charAt(0) + "");
+                rotateQueue.add(commands[i].charAt(0) + "");
+            } else {
+                rotateQueue.add(commands[i]);
+            }
+        }
     }
 
     private void start(){
