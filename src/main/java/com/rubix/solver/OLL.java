@@ -31,9 +31,7 @@ public class OLL {
 
             isOLL = true;
             for (int i = 0 ; i < cubicleList.size(); i++){
-                //System.out.println("OLL - NEW TARGET : " + cubicleList.get(i).getPosition());
                 if (cubicleList.get(i).getNode3D().getFace("U") != Color.YELLOW){
-                    //System.out.println("TARGET DID NOT MATCH OLL SOLVE CRITERIA");
                     isOLL = false;
                 } else {
                     scenario1 = false;
@@ -67,12 +65,10 @@ public class OLL {
             if (!isOLL) {
                 if (scenario1 || scenario3) {
                     if (!lastTarget.equalsIgnoreCase("")) {
-                        System.out.println("OLL - SCENARIO 3");
                         auxUpper = computePrimaryPermutation(cubeStateClone.getCube().get(lastTarget), cubeStateClone.getCube().get("312"), "U");
                         for (String s : auxUpper)
                             tempPermutations.add(s);
-                    } else
-                        System.out.println("OLL - SCENARIO 1");
+                    }
                     tempPermutations.add("F");
                     tempPermutations.add("R");
                     tempPermutations.add("U");
@@ -80,7 +76,6 @@ public class OLL {
                     tempPermutations.add("U'");
                     tempPermutations.add("F'");
                 } else if (scenario2) {
-                    System.out.println("OLL - SCENARIO 2");
                     if (!lastTarget.equalsIgnoreCase("323") || !firstTarget.equalsIgnoreCase("312")) {
                         auxUpper = computePrimaryPermutation(cubeStateClone.getCube().get(lastTarget), cubeStateClone.getCube().get("312"), "U");
                         for (String s : auxUpper)
@@ -93,9 +88,8 @@ public class OLL {
                     tempPermutations.add("L'");
                     tempPermutations.add("B'");
                 }
-            } else {
-                System.out.println("OLL - NOTHING TO BE DONE, STATE IS SOLVED");
             }
+
             for (String s : tempPermutations){
                 finalPermutations.add(s);
                 if (s.length() > 1 && s.charAt(1) == '\'')

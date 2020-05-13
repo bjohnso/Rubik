@@ -80,11 +80,9 @@ public class State {
     public void rotate(String rotation, int direction) {
         if (direction > 0) {
             lastRotation = rotation;
-            System.out.println("PERM : " + lastRotation);
         }
         else if (direction < 0) {
             lastRotation = rotation + '\'';
-            System.out.println("PERM : " + lastRotation);
         }
         String rule[] = cubicleRotations.get(rotation);
         HashMap<String, Cubicle> clone = cloneCube();
@@ -139,17 +137,6 @@ public class State {
 
     public HashMap<String, Cubicle> getCube() {
         return cube;
-    }
-
-    public void printNodes() {
-        System.out.println(cube.get("111").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("211").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("311").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("312").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("313").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("213").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("113").getNode3D().getHomeCubicle());
-        System.out.println(cube.get("112").getNode3D().getHomeCubicle());
     }
 
     public ArrayList<String> getScramble() {

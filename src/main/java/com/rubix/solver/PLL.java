@@ -195,8 +195,6 @@ public class PLL {
             }
         }
 
-        System.out.println("UNSOLVES SIZE : " + unsolves.size() + " PLL COUNT : " + pllCount);
-
         if (source != null && target != null) {
             for (Cubicle c : unsolves) {
                 if (!c.getPosition().equalsIgnoreCase(source.getPosition()) && !c.getPosition().equalsIgnoreCase(target.getPosition())) {
@@ -227,7 +225,6 @@ public class PLL {
             }
 
             ArrayList<String> tempPermutations = buildPermutations(PLLMap.get(sourceFace + targetFace + proxyFace));
-            System.out.println("PERM RULE IS : " + sourceFace + targetFace + proxyFace);
 
             for(String s : tempPermutations)
                 finalPermutations.add(s);
@@ -254,7 +251,6 @@ public class PLL {
                 else
                     cubeStateClone.rotate(s, 1);
             }
-            System.out.println("RECURSION!");
             recursivePermutations = solvePLLEdges(cubeStateClone);
 
             for (String s : recursivePermutations)

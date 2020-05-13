@@ -139,31 +139,6 @@ public class Rubix implements Runnable{
         state = new State();
         commandParser(scramble);
 
-        //SOLVE
-
-        /*ArrayList<String> solve = new ArrayList<>();
-
-        solve = solveDaisy(state);
-        for (String s : solve) {
-            if (s.length() > 1 && s.charAt(1) == '\'')
-                state.rotate(s.charAt(0) + "", -1);
-            else
-                state.rotate(s, 1);
-        }*/
-        /*solve = solveCross(state);
-        for (String s : solve) {
-            if (s.length() > 1 && s.charAt(1) == '\'')
-                state.rotate(s.charAt(0) + "", -1);
-            else
-                state.rotate(s, 1);
-        }
-        solve = solveFL(state);
-        for (String s : solve) {
-            if (s.length() > 1 && s.charAt(1) == '\'')
-                state.rotate(s.charAt(0) + "", -1);
-            else
-                state.rotate(s, 1);
-        }*/
         allTimer();
         algoTimer();
         rotateTimer();
@@ -281,7 +256,6 @@ public class Rubix implements Runnable{
 
             if (System.currentTimeMillis() - 1000 > timer){
                 timer += 1000;
-                //System.out.printf("FPS: %d | TPS: %d\n", fps, tps);
                 fps = 0;
                 tps = 0;
             }
@@ -302,14 +276,14 @@ public class Rubix implements Runnable{
         }
     }
 
-    private void start(){
+    private void start() {
         if (running)
             return;
         running = true;
         new Thread(this, "RubixMain-Thread").start();
     }
 
-    public void stop(){
+    public void stop() {
         if (!running)
             return;
         running = false;

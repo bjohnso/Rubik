@@ -70,7 +70,6 @@ public class Util {
     }
 
     protected static ArrayList<String> computePermutations(State state, Cubicle source, Cubicle target, String forbid) {
-        System.out.println("COMPUTING TOTAL PERMUTATONS FOR " + source.getPosition() + " TO " + target.getPosition() + " WITH FORBID PLANE : " + forbid);
 
         ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> primaryPermutation = new ArrayList<>();
@@ -87,16 +86,13 @@ public class Util {
             for (String s : targetFaces){
                 if (!s.equalsIgnoreCase(forbid)) {
                     //ENFORCING CLOCKWISE BIAS
-                    System.out.println("TESTING BIASES...");
                     testBias = computePrimaryPermutation(source, target, "NONE");
                     if (testBias.isEmpty()){
-                        System.out.println("ENFORCING BIAS WITH ROTATION : " + forbid + '\'');
                         enforceBias.add(forbid + '\'');
                         sourceClone = computeTarget(source, enforceBias);
                     } else {
                         for (String t : testBias){
                             if (t.equalsIgnoreCase(forbid + '\'')){
-                                System.out.println("ENFORCING BIAS WITH ROTATION : " + forbid + '2');
                                 enforceBias.add(forbid);
                                 enforceBias.add(forbid);
                                 sourceClone = computeTarget(source, enforceBias);
@@ -105,9 +101,6 @@ public class Util {
                         }
                     }
                     auxiliaryPermutations = computeAuxiliaryPermutation(state.getCube().get(sourceClone), s, forbid);
-                    for (String t : auxiliaryPermutations){
-                        System.out.println("TEST : "  + t);
-                    }
                     String newSource = computeTarget(state.getCube().get(sourceClone), auxiliaryPermutations);
                     Cubicle clone = state.getCube().get(newSource);
                     ArrayList<String> finalPermutations = new ArrayList<>();
@@ -129,7 +122,6 @@ public class Util {
     }
 
     protected static ArrayList<String> computePrimaryPermutation(Cubicle source, Cubicle target, String plane) {
-        System.out.println("COMPUTING PRIME FOR " + source.getPosition() + " TO " + target.getPosition());
         ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> relationships = computeNodeRelations(source, target);
         String rule[] = null;
@@ -168,7 +160,6 @@ public class Util {
     }
 
     protected static ArrayList<String> computeAuxiliaryPermutation(Cubicle source, String targetPlane, String sourcePlane) {
-        System.out.println("COMPUTING AUX FOR " + source.getPosition() + " TO " + targetPlane + " PLANE");
         ArrayList<String> permutations = new ArrayList<>();
         ArrayList<String> sourceFaces = formatNodeFaces(source);
 
@@ -180,7 +171,6 @@ public class Util {
                     (source.getNode3D().getFace(pair.getKey()) != null || source.getNode3D().getFace(getMirror(pair.getKey())) != null)) {
                 for (int i = 0; i < rule.length - 1; i++){
                     if (rule[i].equalsIgnoreCase(sourcePlane) && rule[i + 1].equalsIgnoreCase(targetPlane)){
-                        System.out.println("FOUND SIMPLE AUX");
                         //Check if Rotation is mirror
                         if (source.getNode3D().getFace(pair.getKey()) != null)
                             permutations.add(pair.getKey());
@@ -195,7 +185,6 @@ public class Util {
         }
 
         if (permutations.isEmpty()){
-            System.out.println("FAILED TO GENERATE AUX PATTERN... ATTEMPTING AUX ALGO");
             for (String s : sourceFaces){
                 if (!s.equalsIgnoreCase(sourcePlane)){
                     permutations.add(s + '\'');
@@ -232,7 +221,6 @@ public class Util {
                     break ;
                 }
             }
-            System.out.println("TESTING TARGET COMPUTATION FOR PERMUTATION : " + s.charAt(0) + " WITH ID : " + id);
         }
         return id;
     }

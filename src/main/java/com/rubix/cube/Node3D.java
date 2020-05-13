@@ -196,11 +196,4 @@ public class Node3D {
         return currentCubicle == homeCubicle ? true : false;
     }
 
-    public void printFaces() {
-        Iterator<Map.Entry<String, Color>> it = faceMap.entrySet().iterator();
-
-        while (it.hasNext()){
-            System.out.println(it.next().getKey());
-        }
-    }
 }
