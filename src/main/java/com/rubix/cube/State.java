@@ -12,12 +12,14 @@ public class State {
     private String rules[];
     private String lastRotation = "";
     private ArrayList<String> scramble = new ArrayList<>();
+    private ArrayList<String> solveRecipes = new ArrayList<>();
     private ArrayList<String> solve = new ArrayList<>();
     private HashMap<String, Cubicle> cube = new HashMap<>();
     private HashMap<String, String[]> cubicleRotations = new HashMap<>();
     private HashMap<String, String[]> faceRotations = new HashMap<>();
 
     public State() {
+        solveRecipes = new ArrayList<>();
         initCubicleRotations();
         initCube();
     }
@@ -198,5 +200,44 @@ public class State {
         State state = new State();
         state.setCube(this.cloneCube());
         return state;
+    }
+
+    public void addSolveRecipe(ArrayList<String> recipe){
+        for (String s : recipe)
+            solveRecipes.add(s);
+    }
+
+    public ArrayList<String> simplifySolveRecipe() {
+        ArrayList<String> simple = new ArrayList<>();
+        int nullify = 1;
+        int last = -1;
+
+        for (int i = 0; i < solveRecipes.size(); i++){
+            String cur = solveRecipes.get(i);
+            if (i > 0){
+                String pre = solveRecipes.get(i - 1);
+                if (cur.equalsIgnoreCase(pre)){
+                    simple.remove(last);
+                    simple.add("2" + cur);
+                    nullify = 1;
+                } else if ((cur + "'").equalsIgnoreCase(pre) || (pre + "'").equalsIgnoreCase(cur)) {
+                    if (nullify == 1) {
+                        simple.remove(last);
+                        last--;
+                    }
+                    else
+                        nullify *= -1;
+                } else {
+                    simple.add(cur);
+                    last++;
+                    nullify = 1;
+                }
+            } else {
+                simple.add(cur);
+                last++;
+                nullify = 1;
+            }
+        }
+        return simple;
     }
 }

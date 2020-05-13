@@ -56,9 +56,8 @@ public class PLL {
 
             if (i == cornersTop.length - 1 && solveCount < 4){
                 if (solveCount == 2){
-                    System.out.println("SOLVE COUNT 2");
                     ArrayList<String> relationship = computeNodeRelations(unsolves.get(0), unsolves.get(1));
-                    if (!relationship.isEmpty()){
+                    if (!relationship.isEmpty() && relationship.size() > 1){
                         for (String s : relationship){
                             if (s.equalsIgnoreCase("L")){
                                 for(int j = 0; j < 3; j++){
@@ -141,8 +140,7 @@ public class PLL {
                         }
                     }
                 }
-                else if (solveCount == 0 || solveCount == 1) {
-                    System.out.println("SOLVE COUNT 0 OR 1");
+                else if (solveCount != 2) {
                     tempPermutations.add("U");
                 }
 

@@ -48,45 +48,56 @@ public class Rubix implements Runnable{
                         ArrayList<String> solve = solveDaisy(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("DAISY");
                     } else if (solve.equalsIgnoreCase("CROSS")){
                         ArrayList<String> solve = solveCross(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("CROSS");
                     } else if (solve.equalsIgnoreCase("FL")){
                         ArrayList<String> solve = solveFL(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("FL");
                     } else if (solve.equalsIgnoreCase("SL")){
                         ArrayList<String> solve = solveSL(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("SL");
                     } else if (solve.equalsIgnoreCase("OLLEDGES")){
                         ArrayList<String> solve = solveOLLEdges(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("OLL EDGES");
                     } else if (solve.equalsIgnoreCase("PLLCORNERS")){
                         ArrayList<String> solve = solvePLLCorners(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("PLL CORNERS");
                     } else if (solve.equalsIgnoreCase("OLLCORNERS")){
                         ArrayList<String> solve = solveOLLCorners(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("OLL CORNERS");
                     } else if (solve.equalsIgnoreCase("PLLEDGES")){
                         ArrayList<String> solve = solvePLLEdges(state);
                         for (String s : solve)
                             rotateQueue.add(s);
+                        state.addSolveRecipe(solve);
                         state.addSolve("PLL EDGES");
                     }
                     else if (solve.equalsIgnoreCase("ALL")){
                         allCount = 0;
+                    } else if (solve.equalsIgnoreCase("RECIPE")){
+                        for (String s : state.simplifySolveRecipe())
+                            System.out.println("SOLVE RECIPE : " + s);
                     }
                     solve = "";
                 }
@@ -165,8 +176,6 @@ public class Rubix implements Runnable{
         rotateQueue.add("R'");
         rotateQueue.add("L");
         rotateQueue.add("L");
-
-        //INFINITE LOOP ON OLL
 
         rotateQueue.add("D");
         rotateQueue.add("F'");
@@ -259,6 +268,8 @@ public class Rubix implements Runnable{
         } else if (KeyInput.isDown(VK_CONTROL)) {
             if (KeyInput.wasPressed((VK_G))){
                 renderer.toggleGridVisible();
+            } else if (KeyInput.wasPressed(VK_S)){
+                solve = "RECIPE";
             }
         } else {
             if (KeyInput.wasPressed(VK_F))

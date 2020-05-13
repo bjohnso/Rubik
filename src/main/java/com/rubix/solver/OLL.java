@@ -20,6 +20,7 @@ public class OLL {
             Boolean scenario1 = true;
             Boolean scenario2 = false;
             Boolean scenario3 = false;
+            String firstTarget = "";
             String lastTarget = "";
 
             ArrayList<Cubicle> cubicleList = new ArrayList<>();
@@ -41,8 +42,10 @@ public class OLL {
                             scenario2 = true;
                     }
                     else if (i == cubicleList.size() - 1){
-                        if (cubicleList.get(0).getNode3D().getFace("U") == Color.YELLOW)
+                        if (cubicleList.get(0).getNode3D().getFace("U") == Color.YELLOW
+                                || cubicleList.get(i - 1).getNode3D().getFace("U") == Color.YELLOW){
                             scenario2 = true;
+                        }
                         else if (cubicleList.get(i - 2).getNode3D().getFace("U") == Color.YELLOW)
                             scenario3 = true;
                     }
@@ -52,6 +55,9 @@ public class OLL {
                         else if (cubicleList.get(i - 2).getNode3D().getFace("U") == Color.YELLOW)
                             scenario3 = true;
                     }
+
+                    if (firstTarget.equalsIgnoreCase(""))
+                        firstTarget = cubicleList.get(i).getPosition();
                     lastTarget = cubicleList.get(i).getPosition();
                 }
             }
@@ -75,7 +81,7 @@ public class OLL {
                     tempPermutations.add("F'");
                 } else if (scenario2) {
                     System.out.println("OLL - SCENARIO 2");
-                    if (!lastTarget.equalsIgnoreCase("323")) {
+                    if (!lastTarget.equalsIgnoreCase("323") || !firstTarget.equalsIgnoreCase("312")) {
                         auxUpper = computePrimaryPermutation(cubeStateClone.getCube().get(lastTarget), cubeStateClone.getCube().get("312"), "U");
                         for (String s : auxUpper)
                             tempPermutations.add(s);
