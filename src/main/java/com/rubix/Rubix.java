@@ -24,6 +24,7 @@ public class Rubix implements Runnable{
     private Renderer renderer;
     private boolean running;
     private State state;
+    private boolean isBasic = false;
     private ArrayList<String> rotateQueue = new ArrayList<>();
     private String[] all = {
         "DAISY", "CROSS", "FL", "SL",
@@ -35,7 +36,7 @@ public class Rubix implements Runnable{
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(new Rubix(args[0]));
+        executorService.execute(new Rubix(args));
     }
 
     private void algoTimer() {
@@ -46,60 +47,79 @@ public class Rubix implements Runnable{
                 if (!solve.equalsIgnoreCase("")) {
                     if (solve.equalsIgnoreCase("DAISY")){
                         ArrayList<String> solve = solveDaisy(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("DAISY");
                     } else if (solve.equalsIgnoreCase("CROSS")){
                         ArrayList<String> solve = solveCross(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("CROSS");
                     } else if (solve.equalsIgnoreCase("FL")){
                         ArrayList<String> solve = solveFL(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("FL");
                     } else if (solve.equalsIgnoreCase("SL")){
                         ArrayList<String> solve = solveSL(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("SL");
                     } else if (solve.equalsIgnoreCase("OLLEDGES")){
                         ArrayList<String> solve = solveOLLEdges(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("OLL EDGES");
                     } else if (solve.equalsIgnoreCase("PLLCORNERS")){
                         ArrayList<String> solve = solvePLLCorners(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("PLL CORNERS");
                     } else if (solve.equalsIgnoreCase("OLLCORNERS")){
                         ArrayList<String> solve = solveOLLCorners(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("OLL CORNERS");
                     } else if (solve.equalsIgnoreCase("PLLEDGES")){
                         ArrayList<String> solve = solvePLLEdges(state);
-                        for (String s : solve)
+                        for (String s : solve) {
                             rotateQueue.add(s);
+                        }
                         state.addSolveRecipe(solve);
                         state.addSolve("PLL EDGES");
                     }
                     else if (solve.equalsIgnoreCase("ALL")){
                         allCount = 0;
                     } else if (solve.equalsIgnoreCase("RECIPE")){
-                        for (String s : state.simplifySolveRecipe())
-                            System.out.println("SOLVE RECIPE : " + s);
+                        ArrayList<String> solves = state.simplifySolveRecipe();
+                        String toPrint = "";
+                        for (int i = 0; i < solves.size(); i++) {
+                            toPrint += solves.get(i);
+                            if (i + 1 <= solves.size()) {
+                                toPrint += " ";
+                            }
+                        }
+                        System.out.println(toPrint);
                     }
-                    solve = "";
+                    if (isBasic && solve.equalsIgnoreCase("PLLEDGES")) {
+                        solve = "RECIPE";
+                    } else {
+                        solve = "";
+                    }
                 }
             }
         }, 0,500);
@@ -131,13 +151,23 @@ public class Rubix implements Runnable{
                     solve = all[allCount];
                 allCount++;
             }
-        }, 0,3000);
+        }, 0,2000);
     }
 
-    public Rubix(String scramble){
+    public Rubix(String... args) {
         //Initialise Window
         state = new State();
-        commandParser(scramble);
+
+        if (args.length <= 2 && args.length > 0) {
+            if (args.length == 2 && args[1].equalsIgnoreCase("--basic")) {
+                isBasic = true;
+                solve = "ALL";
+            }
+            commandParser(args[0]);
+        } else if (args.length > 2) {
+            System.out.println("INCORRECT NUMBER OF ARGUMENTS");
+            System.exit(-1);
+        }
 
         allTimer();
         algoTimer();
@@ -152,56 +182,43 @@ public class Rubix implements Runnable{
     private void tick() {
         //Input Listeners
         String arg = "";
-        if (KeyInput.isDown(VK_SHIFT)) {
-            if (KeyInput.wasPressed(VK_F))
-                arg = "F'";
-            else if (KeyInput.wasPressed(VK_B))
-                arg = "B'";
-            else if (KeyInput.wasPressed(VK_U))
-                arg = "U'";
-            else if (KeyInput.wasPressed(VK_D))
-                arg = "D'";
-            else if (KeyInput.wasPressed(VK_L))
-                arg = "L'";
-            else if (KeyInput.wasPressed(VK_R))
-                arg = "R'";
-        } else if (KeyInput.isDown(VK_CONTROL)) {
-            if (KeyInput.wasPressed((VK_G))){
-                renderer.toggleGridVisible();
-            } else if (KeyInput.wasPressed(VK_S)){
-                solve = "RECIPE";
+        if (allCount >= all.length && solve.equalsIgnoreCase("")) {
+            if (KeyInput.isDown(VK_SHIFT)) {
+                if (KeyInput.wasPressed(VK_F))
+                    arg = "F'";
+                else if (KeyInput.wasPressed(VK_B))
+                    arg = "B'";
+                else if (KeyInput.wasPressed(VK_U))
+                    arg = "U'";
+                else if (KeyInput.wasPressed(VK_D))
+                    arg = "D'";
+                else if (KeyInput.wasPressed(VK_L))
+                    arg = "L'";
+                else if (KeyInput.wasPressed(VK_R))
+                    arg = "R'";
+            } else if (KeyInput.isDown(VK_CONTROL)) {
+                if (KeyInput.wasPressed((VK_G))) {
+                    renderer.toggleGridVisible();
+                } else if (KeyInput.wasPressed(VK_S)) {
+                    solve = "RECIPE";
+                }
+            } else {
+                if (KeyInput.wasPressed(VK_F))
+                    arg = "F";
+                else if (KeyInput.wasPressed(VK_B))
+                    arg = "B";
+                else if (KeyInput.wasPressed(VK_U))
+                    arg = "U";
+                else if (KeyInput.wasPressed(VK_D))
+                    arg = "D";
+                else if (KeyInput.wasPressed(VK_L))
+                    arg = "L";
+                else if (KeyInput.wasPressed(VK_R))
+                    arg = "R";
+                else if (KeyInput.wasPressed(VK_0)) {
+                    solve = "ALL";
+                }
             }
-        } else {
-            if (KeyInput.wasPressed(VK_F))
-                arg = "F";
-            else if (KeyInput.wasPressed(VK_B))
-                arg = "B";
-            else if (KeyInput.wasPressed(VK_U))
-                arg = "U";
-            else if (KeyInput.wasPressed(VK_D))
-                arg = "D";
-            else if (KeyInput.wasPressed(VK_L))
-                arg = "L";
-            else if (KeyInput.wasPressed(VK_R))
-                arg = "R";
-            else if (KeyInput.wasPressed(VK_1))
-                solve = "DAISY";
-            else if (KeyInput.wasPressed(VK_2))
-                solve = "CROSS";
-            else if (KeyInput.wasPressed(VK_3))
-                solve = "FL";
-            else if (KeyInput.wasPressed(VK_4))
-                solve = "SL";
-            else if (KeyInput.wasPressed(VK_5))
-                solve = "OLLEDGES";
-            else if (KeyInput.wasPressed(VK_6))
-                solve = "PLLCORNERS";
-            else if (KeyInput.wasPressed(VK_7))
-                solve = "OLLCORNERS";
-            else if (KeyInput.wasPressed(VK_8))
-                solve = "PLLEDGES";
-            else if (KeyInput.wasPressed(VK_0))
-                solve = "ALL";
         }
         if (!arg.equals("")){
             if (arg.length() > 1) {
@@ -223,8 +240,6 @@ public class Rubix implements Runnable{
         double unprocessed = 0.0;
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
-        int fps = 0;
-        int tps = 0;
         boolean canRender = false;
 
         while (running){
@@ -235,7 +250,6 @@ public class Rubix implements Runnable{
             if (unprocessed >= 1){
                 tick();
                 unprocessed--;
-                tps++;
                 canRender = true;
             } else {
                 canRender = false;
@@ -251,13 +265,10 @@ public class Rubix implements Runnable{
 
             if (canRender){
                 render();
-                fps++;
             }
 
             if (System.currentTimeMillis() - 1000 > timer){
                 timer += 1000;
-                fps = 0;
-                tps = 0;
             }
         }
 

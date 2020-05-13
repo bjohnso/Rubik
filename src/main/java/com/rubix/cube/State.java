@@ -194,35 +194,100 @@ public class State {
             solveRecipes.add(s);
     }
 
-    public ArrayList<String> simplifySolveRecipe() {
-        ArrayList<String> simple = new ArrayList<>();
-        int nullify = 1;
-        int last = -1;
+    public ArrayList<String> getSolveRecipes() {
+        return solveRecipes;
+    }
 
-        for (int i = 0; i < solveRecipes.size(); i++){
-            String cur = solveRecipes.get(i);
-            if (i > 0){
-                String pre = solveRecipes.get(i - 1);
-                if (cur.equalsIgnoreCase(pre)){
-                    simple.remove(last);
-                    simple.add("2" + cur);
-                    nullify = 1;
-                } else if ((cur + "'").equalsIgnoreCase(pre) || (pre + "'").equalsIgnoreCase(cur)) {
-                    if (nullify == 1) {
-                        simple.remove(last);
-                        last--;
-                    }
-                    else
-                        nullify *= -1;
+    public ArrayList<String> simplifySolveRecipe() {
+        ArrayList<String> complex = solveRecipes;
+        ArrayList<String> simple = null;
+        boolean done = false;
+
+        while (!done) {
+            done = true;
+
+            simple = duplicateSimplify(complex);
+            if (simple.size() != complex.size()) {
+                complex = simple;
+                done = false;
+            }
+
+            simple = negateSimplify(complex);
+            if (simple.size() != complex.size()) {
+                complex = simple;
+                done = false;
+            }
+
+        }
+
+        return simple;
+    }
+
+    private ArrayList<String> negateSimplify(ArrayList<String> list) {
+        ArrayList<String> complex = list;
+        ArrayList<String> simple = null;
+        boolean done = false;
+        String cur = "";
+
+        while (!done) {
+            done = true;
+            if (simple != null) {
+                complex = simple;
+            }
+            simple = new ArrayList<>();
+            for (int i = 0; i < complex.size(); i++) {
+                cur = complex.get(i);
+
+                if (i >= complex.size() - 1) {
+                    simple.add(cur);
+                    break;
+                }
+
+                String next = complex.get(i + 1);
+
+                if (cur.equalsIgnoreCase(next + "'") || next.equalsIgnoreCase(cur + "'")) {
+                    i++;
+                    done = true;
                 } else {
                     simple.add(cur);
-                    last++;
-                    nullify = 1;
                 }
-            } else {
-                simple.add(cur);
-                last++;
-                nullify = 1;
+            }
+
+        }
+        return simple;
+    }
+
+    private ArrayList<String> duplicateSimplify(ArrayList<String> list) {
+        ArrayList<String> complex = list;
+        ArrayList<String> simple = null;
+        boolean done = false;
+        String cur = "";
+
+        while (!done) {
+            done = true;
+            if (simple != null) {
+                complex = simple;
+            }
+            simple = new ArrayList<>();
+            for (int i = 0; i < complex.size(); i++) {
+                cur = complex.get(i);
+
+                if (i >= complex.size() - 1) {
+                    simple.add(cur);
+                    break;
+                }
+
+                String next = complex.get(i + 1);
+
+                if (cur.equalsIgnoreCase(next)) {
+                    if (!cur.contains("2")) {
+                        simple.add("2" + cur);
+                    }
+                    i++;
+                    done = false;
+                } else {
+                    simple.add(cur);
+                }
             }
         }
         return simple;
