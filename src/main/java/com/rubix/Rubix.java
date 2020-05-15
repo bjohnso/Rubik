@@ -2,20 +2,17 @@ package com.rubix;
 
 import com.rubix.cube.State;
 import com.rubix.input.KeyInput;
-import com.rubix.rendering.window.Renderer;
 
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import com.rubix.rendering.window.Renderer;
+import com.rubix.solver.Solver;
+
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-import static com.rubix.solver.Cross.*;
-import static com.rubix.solver.F2L.solveFL;
-import static com.rubix.solver.F2L.solveSL;
-import static com.rubix.solver.OLL.*;
-import static com.rubix.solver.PLL.solvePLLCorners;
-import static com.rubix.solver.PLL.solvePLLEdges;
 import static java.awt.event.KeyEvent.*;
 import static java.awt.event.KeyEvent.VK_R;
 
@@ -24,18 +21,21 @@ public class Rubix implements Runnable{
     private Renderer renderer;
     private boolean running;
     private State state;
-    private boolean isBasic = false;
+    private State computeState;
+    private ArrayList<ArrayList<String>> scrambleQueue = new ArrayList<>();
     private ArrayList<String> rotateQueue = new ArrayList<>();
+    private String lifeCycle[] = {"SCRAMBLE", "SOLVE", "PRINT"};
+    private int currentLifeCycleState = 0;
+    private boolean isWaiting = false;
     private String[] all = {
         "DAISY", "CROSS", "FL", "SL",
         "OLLEDGES", "PLLCORNERS", "OLLCORNERS", "PLLEDGES"
     };
-    private int allCount = all.length;
+    private static ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-    private String solve = "";
+    private boolean autoMode = false;
 
     public static void main(String[] args) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(new Rubix(args));
     }
 
@@ -44,82 +44,61 @@ public class Rubix implements Runnable{
         delayTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!solve.equalsIgnoreCase("")) {
-                    if (solve.equalsIgnoreCase("DAISY")){
-                        ArrayList<String> solve = solveDaisy(state);
-                        for (String s : solve) {
+                if (currentLifeCycleState == 0) {
+                    isWaiting = false;
+                    if (!scrambleQueue.isEmpty()) {
+                        state.resetSolveRecipes();
+                        computeState.resetSolveRecipes();
+
+                        performRotations(scrambleQueue.get(0));
+                        for (String s : scrambleQueue.get(0)) {
                             rotateQueue.add(s);
                         }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("DAISY");
-                    } else if (solve.equalsIgnoreCase("CROSS")){
-                        ArrayList<String> solve = solveCross(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("CROSS");
-                    } else if (solve.equalsIgnoreCase("FL")){
-                        ArrayList<String> solve = solveFL(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("FL");
-                    } else if (solve.equalsIgnoreCase("SL")){
-                        ArrayList<String> solve = solveSL(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("SL");
-                    } else if (solve.equalsIgnoreCase("OLLEDGES")){
-                        ArrayList<String> solve = solveOLLEdges(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("OLL EDGES");
-                    } else if (solve.equalsIgnoreCase("PLLCORNERS")){
-                        ArrayList<String> solve = solvePLLCorners(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("PLL CORNERS");
-                    } else if (solve.equalsIgnoreCase("OLLCORNERS")){
-                        ArrayList<String> solve = solveOLLCorners(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("OLL CORNERS");
-                    } else if (solve.equalsIgnoreCase("PLLEDGES")){
-                        ArrayList<String> solve = solvePLLEdges(state);
-                        for (String s : solve) {
-                            rotateQueue.add(s);
-                        }
-                        state.addSolveRecipe(solve);
-                        state.addSolve("PLL EDGES");
                     }
-                    else if (solve.equalsIgnoreCase("ALL")){
-                        allCount = 0;
-                    } else if (solve.equalsIgnoreCase("RECIPE")){
-                        ArrayList<String> solves = state.simplifySolveRecipe();
-                        String toPrint = "";
-                        for (int i = 0; i < solves.size(); i++) {
-                            toPrint += solves.get(i);
-                            if (i + 1 <= solves.size()) {
-                                toPrint += " ";
+                    if (autoMode)
+                        currentLifeCycleState++;
+                    else
+                        isWaiting = true;
+                }
+
+                if (currentLifeCycleState == 1) {
+                    isWaiting = false;
+                    boolean isSolved = false;
+                    int solveOperation = 0;
+                    Future<ArrayList<String>> future = executorService.submit(new Solver(computeState, all[solveOperation]));
+                    while (!isSolved) {
+                        if (future.isDone()) {
+                            try {
+                                performRotations(future.get());
+                                computeState.addSolveRecipe(future.get());
+
+                                if (solveOperation >= all.length - 1) {
+                                    isSolved = true;
+                                } else {
+                                    future = executorService.submit(new Solver(computeState, all[++solveOperation]));
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                        System.out.println(toPrint);
                     }
-                    if (isBasic && solve.equalsIgnoreCase("PLLEDGES")) {
-                        solve = "RECIPE";
-                    } else {
-                        solve = "";
+                    for (String s : computeState.getSolveRecipes()) {
+                        rotateQueue.add(s);
                     }
+                    state.addSolveRecipe(computeState.getSolveRecipes());
+                    if (autoMode)
+                        currentLifeCycleState++;
+                    else
+                        isWaiting = true;
+                }
+
+                if (currentLifeCycleState == 2) {
+                    isWaiting = false;
+                    System.out.println("<----------SOLUTION---------->");
+                    System.out.println(state.simplifySolveRecipe());
+                    currentLifeCycleState = 0;
+                    if (!autoMode)
+                        isWaiting = true;
                 }
             }
         }, 0,500);
@@ -134,42 +113,46 @@ public class Rubix implements Runnable{
                     String rotation = rotateQueue.get(0);
                     if (rotation.length() > 1 && rotation.charAt(1) == '\'')
                         state.rotate(rotation.charAt(0) + "", -1);
+                    else if (rotation.length() > 1 && rotation.charAt(1) == '2') {
+                        state.rotate(rotation.charAt(0) + "", 1);
+                        state.rotate(rotation.charAt(0) + "", 1);
+                    }
                     else
                         state.rotate(rotation, 1);
                     rotateQueue.remove(0);
                 }
             }
-        }, 0,20);
+        }, 0,50);
     }
 
-    private void allTimer() {
-        Timer delayTimer = new Timer();
-        delayTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (allCount < all.length)
-                    solve = all[allCount];
-                allCount++;
+    private void performRotations(ArrayList<String> rot) {
+        for (String r : rot) {
+            if (r.length() > 1 && r.charAt(1) == '\'')
+                computeState.rotate(r.charAt(0) + "", -1);
+            else if (r.length() > 1 && r.charAt(1) == '2') {
+                computeState.rotate(r.charAt(0) + "", 1);
+                computeState.rotate(r.charAt(0) + "", 1);
             }
-        }, 0,2000);
+            else
+                computeState.rotate(r, 1);
+        }
     }
 
     public Rubix(String... args) {
         //Initialise Window
         state = new State();
+        computeState = new State();
 
-        if (args.length <= 2 && args.length > 0) {
-            if (args.length == 2 && args[1].equalsIgnoreCase("--basic")) {
-                isBasic = true;
-                solve = "ALL";
+        if (args.length > 0) {
+            if (args.length >= 2 && args[0].equalsIgnoreCase("--Q")) {
+
             }
-            commandParser(args[0]);
+            commandParser(args);
         } else if (args.length > 2) {
             System.out.println("INCORRECT NUMBER OF ARGUMENTS");
             System.exit(-1);
         }
 
-        allTimer();
         algoTimer();
         rotateTimer();
         this.renderer = new Renderer(this);
@@ -182,7 +165,7 @@ public class Rubix implements Runnable{
     private void tick() {
         //Input Listeners
         String arg = "";
-        if (allCount >= all.length && solve.equalsIgnoreCase("")) {
+        if (isWaiting) {
             if (KeyInput.isDown(VK_SHIFT)) {
                 if (KeyInput.wasPressed(VK_F))
                     arg = "F'";
@@ -200,7 +183,9 @@ public class Rubix implements Runnable{
                 if (KeyInput.wasPressed((VK_G))) {
                     renderer.toggleGridVisible();
                 } else if (KeyInput.wasPressed(VK_S)) {
-                    solve = "RECIPE";
+                    if (currentLifeCycleState == 1) {
+                        currentLifeCycleState = 2;
+                    }
                 }
             } else {
                 if (KeyInput.wasPressed(VK_F))
@@ -216,16 +201,16 @@ public class Rubix implements Runnable{
                 else if (KeyInput.wasPressed(VK_R))
                     arg = "R";
                 else if (KeyInput.wasPressed(VK_0)) {
-                    solve = "ALL";
+                    if (currentLifeCycleState == 0) {
+                        currentLifeCycleState = 1;
+                    }
                 }
             }
         }
         if (!arg.equals("")){
-            if (arg.length() > 1) {
-                if (arg.charAt(1) == '\'')
-                    state.rotate(arg.charAt(0) + "", -1);
-            } else
-                state.rotate(arg.charAt(0) + "", 1);
+            ArrayList<String> userScramble = new ArrayList<>();
+            userScramble.add(arg);
+            scrambleQueue.add(userScramble);
         }
     }
 
@@ -275,14 +260,42 @@ public class Rubix implements Runnable{
         System.exit(0);
     }
 
-    private void commandParser(String scramble) {
-        String commands[] = scramble.split(" ");
-        for (int i = 0; i < commands.length; i++) {
-            if (commands[i].contains("2")) {
-                rotateQueue.add(commands[i].charAt(0) + "");
-                rotateQueue.add(commands[i].charAt(0) + "");
-            } else {
-                rotateQueue.add(commands[i]);
+    private void commandParser(String... scrambles) {
+        int it = 0;
+        for (String s : scrambles) {
+            if (!s.equalsIgnoreCase("--Q")) {
+                String commands[] = s.split(" ");
+                boolean isValid = false;
+                String valid[] = {"F", "U", "R", "L", "B", "D", "F2", "U2", "D2", "B2", "R2", "L2", "F'", "U'", "R'", "L'", "B'", "D'"};
+
+                for (int i = 0; i < commands.length; i++) {
+                    isValid = false;
+                    for (int j = 0; j < valid.length; j++) {
+                        if (commands[i].equals(valid[j])) {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                    if (!isValid) {
+                        break;
+                    }
+                }
+
+                if (isValid) {
+                    ArrayList<String> recipe = new ArrayList<>();
+                    for (int i = 0; i < commands.length; i++) {
+                        if (commands[i].contains("2")) {
+                            recipe.add(commands[i].charAt(0) + "");
+                            recipe.add(commands[i].charAt(0) + "");
+                        } else {
+                            recipe.add(commands[i]);
+                        }
+                    }
+                    scrambleQueue.add(recipe);
+                } else {
+                    System.out.println("ERROR - INVALID INPUT!");
+                    System.exit(-1);
+                }
             }
         }
     }

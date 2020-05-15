@@ -5,6 +5,7 @@ import com.rubix.cube.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
 
 import static com.rubix.solver.Util.*;
 
@@ -279,5 +280,4 @@ public class PLL {
 
         return permutations;
     }
-
 }

@@ -10,6 +10,7 @@ import static com.rubix.solver.Util.*;
 
 public class F2L {
 
+
     private static String[] cornersBottom = {
             "111",
             "113",
@@ -57,7 +58,6 @@ public class F2L {
                 if ((source = findNode(cubeStateClone, planeMap.get("U"), target.getPosition())) != null){
                     //SEARCH UP PLANE
                     auxPermutations = computePrimaryPermutation(source, auxTarget, "U");
-                    if (auxPermutations.isEmpty())
                     //DETERMINE WHETHER TO US LEFT HAND RULE OR RIGHT HAND RULE
                     vertPermutations = vertInsert(auxTarget);
                 } else {

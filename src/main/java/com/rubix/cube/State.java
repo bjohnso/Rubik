@@ -11,9 +11,9 @@ public class State {
 
     private String rules[];
     private String lastRotation = "";
+    private ArrayList<String> solveOperations = new ArrayList<>();
     private ArrayList<String> scramble = new ArrayList<>();
     private ArrayList<String> solveRecipes = new ArrayList<>();
-    private ArrayList<String> solve = new ArrayList<>();
     private HashMap<String, Cubicle> cube = new HashMap<>();
     private HashMap<String, String[]> cubicleRotations = new HashMap<>();
     private HashMap<String, String[]> faceRotations = new HashMap<>();
@@ -143,41 +143,28 @@ public class State {
         return scramble;
     }
 
-    public ArrayList<String> getSolve() {
-        return solve;
-    }
-
-    public void setScramble(ArrayList<String> scramble) {
-        this.scramble = scramble;
-    }
 
     public void setCube(HashMap<String, Cubicle> cube) {
         this.cube = cube;
     }
 
-    public void setCubicleRotations(HashMap<String, String[]> cubicleRotations) {
-        this.cubicleRotations = cubicleRotations;
+
+    public void setSolveOperations(ArrayList<String> solveOperations) {
+        this.solveOperations = solveOperations;
     }
 
-    public void setFaceRotations(HashMap<String, String[]> faceRotations) {
-        this.faceRotations = faceRotations;
+    public ArrayList<String> getSolveOperations() {
+        return solveOperations;
     }
 
-    public void addSolve(String solve) {
-        this.solve.add(solve);
-    }
-
-    public void setRules(String[] rules) {
-        this.rules = rules;
+    public void addSolveOperation(String operation) {
+        this.solveOperations.add(operation);
     }
 
     public void addScramble(String scramble) {
         this.scramble.add(scramble);
     }
 
-    public void setSolve(ArrayList<String> solve) {
-        this.solve = solve;
-    }
 
     public String getLastRotation() {
         return lastRotation;
@@ -196,6 +183,10 @@ public class State {
 
     public ArrayList<String> getSolveRecipes() {
         return solveRecipes;
+    }
+
+    public void resetSolveRecipes() {
+        this.solveRecipes.clear();
     }
 
     public ArrayList<String> simplifySolveRecipe() {
@@ -281,7 +272,7 @@ public class State {
 
                 if (cur.equalsIgnoreCase(next)) {
                     if (!cur.contains("2")) {
-                        simple.add("2" + cur);
+                        simple.add(cur + "2");
                     }
                     i++;
                     done = false;

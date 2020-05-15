@@ -166,9 +166,9 @@ public class Renderer extends Canvas {
 
         Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 4), Color.GREEN,
                 "SOLVE : ", (windowWidth / 100 * 3), (windowHeight / 100 * 60));
-        for (int i = 0; i < state.getSolve().size(); i++) {
+        for (int i = 0; i < state.getSolveOperations().size(); i++) {
             Fonts.drawString(graphics, new Font("Arial", Font.BOLD, windowHeight / 100 * 3), Color.GREEN,
-                    state.getSolve().get(i) + "", (windowWidth / 100 * 3),
+                    state.getSolveOperations().get(i) + "", (windowWidth / 100 * 3),
                     (windowHeight / 100 * 65) + (windowHeight / 100 * 5 * i));
         }
     }
