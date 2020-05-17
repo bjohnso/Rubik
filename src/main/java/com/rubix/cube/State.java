@@ -77,6 +77,17 @@ public class State {
         cube.put("333", new Cubicle("333", "C"));
     }
 
+    public boolean isSolvedState() {
+        Iterator<Map.Entry<String, Cubicle>> it = cube.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Cubicle> pair = it.next();
+            if (!pair.getValue().getNode3D().isSolved() || pair.getValue().getNode3D().isTwisted()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void rotate(String rotation, int direction) {
         if (direction > 0) {
             lastRotation = rotation;

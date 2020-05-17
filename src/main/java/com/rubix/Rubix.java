@@ -44,27 +44,34 @@ public class Rubix implements Runnable{
         delayTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (currentLifeCycleState == 0) {
+                if (currentLifeCycleState == 0 && isWaiting) {
                     isWaiting = false;
                     if (!scrambleQueue.isEmpty()) {
-                        state.resetSolveRecipes();
-                        computeState.resetSolveRecipes();
 
                         performRotations(scrambleQueue.get(0));
                         for (String s : scrambleQueue.get(0)) {
                             rotateQueue.add(s);
                         }
+                        scrambleQueue.remove(0);
                     }
                     if (autoMode)
                         currentLifeCycleState++;
-                    else
-                        isWaiting = true;
+                    isWaiting = true;
                 }
 
-                if (currentLifeCycleState == 1) {
+                if (currentLifeCycleState == 1 && isWaiting) {
+                    if (computeState.isSolvedState()) {
+                        if (autoMode)
+                            currentLifeCycleState++;
+                        else
+                            currentLifeCycleState = 0;
+                        return;
+                    }
                     isWaiting = false;
                     boolean isSolved = false;
                     int solveOperation = 0;
+                    state.resetSolveRecipes();
+                    computeState.resetSolveRecipes();
                     Future<ArrayList<String>> future = executorService.submit(new Solver(computeState, all[solveOperation]));
                     while (!isSolved) {
                         if (future.isDone()) {
@@ -89,16 +96,30 @@ public class Rubix implements Runnable{
                     if (autoMode)
                         currentLifeCycleState++;
                     else
-                        isWaiting = true;
+                        currentLifeCycleState = 0;
+                    isWaiting = true;
                 }
 
-                if (currentLifeCycleState == 2) {
+                if (currentLifeCycleState == 2 && isWaiting) {
                     isWaiting = false;
-                    System.out.println("<----------SOLUTION---------->");
-                    System.out.println(state.simplifySolveRecipe());
+                    if (state.simplifySolveRecipe().size() > 0) {
+                        System.out.println("<----------SOLUTION---------->");
+                        for (int i = 0; i < state.simplifySolveRecipe().size(); i++) {
+                            System.out.print(state.simplifySolveRecipe().get(i));
+                            if (i == 19 || i + 1 >= state.simplifySolveRecipe().size()
+                                    || (i > 19 && (i + 1) % 20 == 0)) {
+                                System.out.print("\n");
+                            } else {
+                                System.out.print(" ");
+                            }
+                        }
+                    }
+                    if (autoMode) {
+                        if (scrambleQueue.isEmpty())
+                            autoMode = false;
+                    }
                     currentLifeCycleState = 0;
-                    if (!autoMode)
-                        isWaiting = true;
+                    isWaiting = true;
                 }
             }
         }, 0,500);
@@ -122,7 +143,7 @@ public class Rubix implements Runnable{
                     rotateQueue.remove(0);
                 }
             }
-        }, 0,50);
+        }, 0,20);
     }
 
     private void performRotations(ArrayList<String> rot) {
@@ -144,14 +165,10 @@ public class Rubix implements Runnable{
         computeState = new State();
 
         if (args.length > 0) {
-            if (args.length >= 2 && args[0].equalsIgnoreCase("--Q")) {
-
-            }
             commandParser(args);
-        } else if (args.length > 2) {
-            System.out.println("INCORRECT NUMBER OF ARGUMENTS");
-            System.exit(-1);
         }
+        autoMode = true;
+        isWaiting = true;
 
         algoTimer();
         rotateTimer();
@@ -162,10 +179,18 @@ public class Rubix implements Runnable{
         start();
     }
 
+    private boolean isRotating() {
+        return !rotateQueue.isEmpty() ? true : false;
+    }
+
     private void tick() {
         //Input Listeners
         String arg = "";
-        if (isWaiting) {
+        if (KeyInput.wasPressed((VK_G))) {
+            renderer.toggleGridVisible();
+        }
+
+        if (isWaiting && !autoMode && currentLifeCycleState == 0 && !isRotating()) {
             if (KeyInput.isDown(VK_SHIFT)) {
                 if (KeyInput.wasPressed(VK_F))
                     arg = "F'";
@@ -179,14 +204,6 @@ public class Rubix implements Runnable{
                     arg = "L'";
                 else if (KeyInput.wasPressed(VK_R))
                     arg = "R'";
-            } else if (KeyInput.isDown(VK_CONTROL)) {
-                if (KeyInput.wasPressed((VK_G))) {
-                    renderer.toggleGridVisible();
-                } else if (KeyInput.wasPressed(VK_S)) {
-                    if (currentLifeCycleState == 1) {
-                        currentLifeCycleState = 2;
-                    }
-                }
             } else {
                 if (KeyInput.wasPressed(VK_F))
                     arg = "F";
@@ -201,13 +218,23 @@ public class Rubix implements Runnable{
                 else if (KeyInput.wasPressed(VK_R))
                     arg = "R";
                 else if (KeyInput.wasPressed(VK_0)) {
-                    if (currentLifeCycleState == 0) {
-                        currentLifeCycleState = 1;
-                    }
+                    System.out.println("MANUAL INPUT : SOLVE");
+                    currentLifeCycleState = 1;
                 }
             }
         }
-        if (!arg.equals("")){
+
+        if (isWaiting && !autoMode && currentLifeCycleState == 0 && !isRotating()) {
+            if (KeyInput.isDown(VK_CONTROL)) {
+                if (KeyInput.wasPressed(VK_S)) {
+                    System.out.println("MANUAL INPUT : SOLUTION PRINT");
+                    currentLifeCycleState = 2;
+                }
+            }
+        }
+
+        if (!arg.equals("")) {
+            System.out.println("MANUAL INPUT : SCRAMBLING - " + arg);
             ArrayList<String> userScramble = new ArrayList<>();
             userScramble.add(arg);
             scrambleQueue.add(userScramble);
@@ -263,7 +290,6 @@ public class Rubix implements Runnable{
     private void commandParser(String... scrambles) {
         int it = 0;
         for (String s : scrambles) {
-            if (!s.equalsIgnoreCase("--Q")) {
                 String commands[] = s.split(" ");
                 boolean isValid = false;
                 String valid[] = {"F", "U", "R", "L", "B", "D", "F2", "U2", "D2", "B2", "R2", "L2", "F'", "U'", "R'", "L'", "B'", "D'"};
@@ -296,7 +322,6 @@ public class Rubix implements Runnable{
                     System.out.println("ERROR - INVALID INPUT!");
                     System.exit(-1);
                 }
-            }
         }
     }
 
