@@ -76,6 +76,7 @@ public class Rubix implements Runnable{
                     while (!isSolved) {
                         if (future.isDone()) {
                             try {
+                                state.addSolveOperation(all[solveOperation]);
                                 performRotations(future.get());
                                 computeState.addSolveRecipe(future.get());
 

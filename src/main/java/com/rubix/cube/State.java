@@ -198,6 +198,7 @@ public class State {
 
     public void resetSolveRecipes() {
         this.solveRecipes.clear();
+        this.solveOperations.clear();
     }
 
     public ArrayList<String> simplifySolveRecipe() {
